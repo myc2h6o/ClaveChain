@@ -29,6 +29,9 @@
     <ClInclude Include="Enclave_t.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="Enclave.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Enclave_private.pem">
@@ -39,9 +42,6 @@
     <Xml Include="Enclave.config.xml">
       <Filter>Resource Files</Filter>
     </Xml>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Enclave.edl">
