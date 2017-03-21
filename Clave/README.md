@@ -3,7 +3,7 @@
 ## Prerequisites
 - [Intel Sgx Sdk](https://software.intel.com/en-us/sgx)
 
-## Compile and Build
+## Compile and build
 - Windows: Visual Studio 2015
 - Linux: Using Makefile
 
