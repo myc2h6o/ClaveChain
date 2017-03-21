@@ -21,7 +21,5 @@ void oprintf(const char *fmt, ...) {
  * Test function for oprintf
  */
 void ecall_printHello(void) {
-    char *str = "Hello From Enclave";
-    int number = 1;
-    oprintf("%s %d!\n", str, number);
+    oprintf("%s %d!\n", "Hello From Enclave", 1);
 }
