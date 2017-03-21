@@ -1,2 +1,3 @@
 # ClaveChain
-Blockchain retrieve data through SGX
+Blockchain retrieve data through intel SGX
+- Clave: Data getter using Enclave
