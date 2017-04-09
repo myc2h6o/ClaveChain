@@ -320,14 +320,20 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Chain.cpp" />
     <ClCompile Include="Enclave.cpp" />
     <ClCompile Include="Enclave_t.c" />
+    <ClCompile Include="Net.cpp" />
     <ClCompile Include="Output.cpp" />
+    <ClCompile Include="Secret.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Chain.h" />
     <ClInclude Include="Enclave.h" />
     <ClInclude Include="Enclave_t.h" />
+    <ClInclude Include="Net.h" />
     <ClInclude Include="Output.h" />
+    <ClInclude Include="Secret.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Enclave.edl">
@@ -364,8 +370,11 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Prerelease|x64'">%(Filename)_t.h;%(Filename)_t.c;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Prerelease|x64'">Enclave.config.xml;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
+    <None Include="Chain.edl" />
     <None Include="Enclave_private.pem" />
+    <None Include="Net.edl" />
     <None Include="Output.edl" />
+    <None Include="Secret.edl" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Enclave.config.xml" />

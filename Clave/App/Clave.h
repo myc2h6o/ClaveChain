@@ -22,8 +22,11 @@
 *   suppliers or licensors in any way.
 */
 
-#ifndef _APP_H_
-#define _APP_H_
+#ifndef _CLAVE_H_
+#define _CLAVE_H_
+
+#include "Enclave_u.h"
+#include "sgx_urts.h"
 
 #ifndef TRUE
 # define TRUE 1
@@ -40,5 +43,14 @@
 # define TOKEN_FILENAME   "enclave.token"
 # define ENCLAVE_FILENAME "enclave.signed.so"
 #endif
+
+class Clave {
+public:
+    int init();
+    int destroy() { return sgx_destroy_enclave(global_eid); }
+    sgx_status_t printHello() { return ecall_printHello(global_eid); }
+private:
+    sgx_enclave_id_t global_eid = 0;
+};
 
 #endif

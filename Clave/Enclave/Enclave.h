@@ -1,4 +1,4 @@
-#ifndef _ENCLAVE_H
-#define _ENCLAVE_H
+#ifndef _ENCLAVE_H_
+#define _ENCLAVE_H_
 
 #endif

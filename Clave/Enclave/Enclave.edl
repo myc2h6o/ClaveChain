@@ -1,6 +1,9 @@
 enclave {
     from "sgx_tstdc.edl" import *;
+    from "Chain.edl" import *;
+    from "Net.edl" import *;
     from "Output.edl" import *;
+    from "Secret.edl" import *;
 
     trusted {
     };

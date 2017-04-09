@@ -246,11 +246,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="App.h" />
+    <ClInclude Include="Clave.h" />
     <ClInclude Include="Enclave_u.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="Clave.cpp" />
     <ClCompile Include="Enclave_u.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Prerelease|x64'">
       </PrecompiledHeader>
