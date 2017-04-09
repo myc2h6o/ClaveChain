@@ -35,6 +35,23 @@
 #endif
 
 #include "Clave.h"
+#include "Net.h"
+
+#ifndef TRUE
+# define TRUE 1
+#endif
+
+#ifndef FALSE
+# define FALSE 0
+#endif
+
+#if defined(_MSC_VER)
+# define TOKEN_FILENAME   "Enclave.token"
+# define ENCLAVE_FILENAME "Enclave.signed.dll"
+#elif defined(__GNUC__)
+# define TOKEN_FILENAME   "enclave.token"
+# define ENCLAVE_FILENAME "enclave.signed.so"
+#endif
 
 typedef struct _sgx_errlist_t {
     sgx_status_t err;
@@ -271,7 +288,11 @@ int Clave::init(void)
 /* ocall_printString
  * OCall function to print string to terminal
  */
-void ocall_printString(const char *str)
-{
+void ocall_printString(const char *str) {
     printf("Enclave: %s", str);
+}
+
+
+void ocall_getDataFromUri(const char *uri, char *data) {
+    data = Net::getDataFromUri(uri);
 }

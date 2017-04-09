@@ -246,11 +246,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Chain.h" />
     <ClInclude Include="Clave.h" />
     <ClInclude Include="Enclave_u.h" />
+    <ClInclude Include="Net.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="Chain.cpp" />
     <ClCompile Include="Clave.cpp" />
     <ClCompile Include="Enclave_u.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Prerelease|x64'">
@@ -270,6 +273,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Net.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\Enclave\Enclave.edl">

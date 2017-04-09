@@ -1,6 +1,6 @@
 enclave {
     trusted {
-        public void ecall_printHello(void);
+        public void ecall_printPublicInfo(void);
     };
 
     untrusted {

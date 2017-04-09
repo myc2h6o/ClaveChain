@@ -16,10 +16,6 @@ void oprintf(const char *fmt, ...) {
     ocall_printString(buf);
 }
 
-/*
-* ecall_printHello:
-* Test function for oprintf
-*/
-void ecall_printHello(void) {
+void ecall_printPublicInfo(void) {
     oprintf("%s %d!\n", "Hello From Enclave", 1);
 }

@@ -47,13 +47,13 @@
     <ClInclude Include="Output.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Net.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Chain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Secret.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Net.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -68,9 +68,6 @@
       <Filter>Source Files</Filter>
     </None>
     <None Include="Chain.edl">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="Secret.edl">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

@@ -374,7 +374,6 @@
     <None Include="Enclave_private.pem" />
     <None Include="Net.edl" />
     <None Include="Output.edl" />
-    <None Include="Secret.edl" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Enclave.config.xml" />
