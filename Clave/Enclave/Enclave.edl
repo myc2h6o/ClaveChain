@@ -3,6 +3,7 @@ enclave {
     from "Chain.edl" import *;
     from "Net.edl" import *;
     from "Output.edl" import *;
+    from "Secret.edl" import *;
 
     trusted {
     };

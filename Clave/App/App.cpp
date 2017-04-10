@@ -1,7 +1,11 @@
 #include <iostream>
 #include <string>
+#include <vector>
+#include <time.h>
 #include "Chain.h"
 #include "Clave.h"
+
+#define MILLI_SECOND_WAIT_TIME 5000
 
 int main() {
     // Initialize enclave
@@ -12,6 +16,7 @@ int main() {
         return -1;
     }
 
+    clave.generateKeyPair();
     clave.printPublicInfo();
 
     //Set middle contract address on blockchain
@@ -34,8 +39,20 @@ int main() {
 
     // Main loop
     std::cout << "Start main loop\n";
+    size_t nRequests = 0;
+    std::string signedTransaction = "";
     while (1) {
-        break;
+        std::vector<Request> requests = Chain::getRequests();
+        nRequests = requests.size();
+        if (nRequests == 0) {
+            Sleep(MILLI_SECOND_WAIT_TIME);
+        }
+        else {
+            for (size_t i = 0; i < nRequests; ++i) {
+                signedTransaction = clave.getSignedTransactionFromRequest(requests[i]);
+                Chain::callContract(signedTransaction);
+            }
+        }
     }
 
     std::cout << "Some Error happened\n";

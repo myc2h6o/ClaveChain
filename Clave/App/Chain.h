@@ -6,10 +6,9 @@
 
 class Chain {
 public:
-    std::vector<Request> getRequests();
-    void callRequest(const Request&);
+    static std::vector<Request> getRequests();
+    static void callContract(const std::string& signedTransaction);
 private:
-
 };
 
 #endif
