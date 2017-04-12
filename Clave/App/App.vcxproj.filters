@@ -16,7 +16,13 @@
     <ClInclude Include="Enclave_u.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="App.h">
+    <ClInclude Include="Clave.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Chain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Net.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -24,7 +30,16 @@
     <ClCompile Include="Enclave_u.c">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="Clave.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="App.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Chain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Net.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

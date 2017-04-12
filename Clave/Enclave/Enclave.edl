@@ -1,13 +1,13 @@
 enclave {
     from "sgx_tstdc.edl" import *;
+    from "Chain.edl" import *;
+    from "Net.edl" import *;
+    from "Output.edl" import *;
+    from "Secret.edl" import *;
 
     trusted {
-        /* define ECALLs here. */
-        public void ecall_printHello(void);
     };
 
     untrusted {
-        /* define OCALLs here. */
-        void ocall_printString([in, string] const char *str);
     };
 };
