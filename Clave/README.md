@@ -9,6 +9,6 @@
 
 ## Run in Simulation mode
 - Windows
-    * Set build configuration to Simulation Win32
+    * Set build configuration to Simulation x86
 - Linux
 -     make SGX_MODE=SIM
