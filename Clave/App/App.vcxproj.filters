@@ -42,6 +42,12 @@
     <ClCompile Include="Net.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="mbedtls_sgx_u_net.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mbedtls_sgx_u_std.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\Enclave\Enclave.edl">

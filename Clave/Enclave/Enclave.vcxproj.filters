@@ -73,6 +73,9 @@
     <None Include="Secret.edl">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="mbedtls_tlib.edl">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Enclave.config.xml">

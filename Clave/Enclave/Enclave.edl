@@ -4,6 +4,7 @@ enclave {
     from "Net.edl" import *;
     from "Output.edl" import *;
     from "Secret.edl" import *;
+    from "mbedtls_tlib.edl" import *;
 
     trusted {
     };
