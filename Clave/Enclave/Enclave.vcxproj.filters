@@ -36,6 +36,9 @@
     <ClCompile Include="Secret.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Keccak.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enclave_t.h">
@@ -54,6 +57,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Net.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Keccak.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

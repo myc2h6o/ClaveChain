@@ -15,7 +15,3 @@ void oprintf(const char *fmt, ...) {
     va_end(ap);
     ocall_printString(buf);
 }
-
-void ecall_printPublicInfo(void) {
-    oprintf("%s %d!\n", "Hello From Enclave", 1);
-}

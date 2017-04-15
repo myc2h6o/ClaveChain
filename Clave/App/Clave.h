@@ -9,8 +9,8 @@ class Clave {
 public:
     int init();
     int destroy() { return sgx_destroy_enclave(global_eid); }
-    sgx_status_t printPublicInfo() { return ecall_printPublicInfo(global_eid); }
     sgx_status_t generateKeyPair() { return ecall_generateKeyPair(global_eid); }
+    sgx_status_t freeKeyPair() { return ecall_freeKeyPair(global_eid); }
     sgx_status_t setContractAddress(const char *address) { return ecall_setContractAddress(global_eid, address); }
     std::string getSignedTransactionFromRequest(const Request& req) {
         char *result = NULL;

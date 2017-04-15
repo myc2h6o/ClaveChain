@@ -323,6 +323,7 @@
     <ClCompile Include="Chain.cpp" />
     <ClCompile Include="Enclave.cpp" />
     <ClCompile Include="Enclave_t.c" />
+    <ClCompile Include="Keccak.cpp" />
     <ClCompile Include="Net.cpp" />
     <ClCompile Include="Output.cpp" />
     <ClCompile Include="Secret.cpp" />
@@ -331,6 +332,7 @@
     <ClInclude Include="Chain.h" />
     <ClInclude Include="Enclave.h" />
     <ClInclude Include="Enclave_t.h" />
+    <ClInclude Include="Keccak.h" />
     <ClInclude Include="Net.h" />
     <ClInclude Include="Output.h" />
     <ClInclude Include="Secret.h" />

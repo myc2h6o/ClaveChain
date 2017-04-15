@@ -17,7 +17,6 @@ int main() {
     }
 
     clave.generateKeyPair();
-    clave.printPublicInfo();
 
     //Set middle contract address on blockchain
     std::string address;
@@ -58,6 +57,7 @@ int main() {
     std::cout << "Some Error happened\n";
 
     // Destroy the enclave
+    clave.freeKeyPair();
     clave.destroy();
     getchar();
     return 0;
