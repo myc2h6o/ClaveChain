@@ -27,9 +27,6 @@
     <ClCompile Include="Output.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Net.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Chain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -43,6 +40,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mbedTlsSgxSignV.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="s_client.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OuterData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,9 +65,6 @@
     <ClInclude Include="Secret.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Net.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Keccak.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -72,6 +72,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mbedTlsSgxSignV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="s_client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ca_bundle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OuterData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -82,9 +91,6 @@
     <None Include="Output.edl">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="Net.edl">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="Chain.edl">
       <Filter>Source Files</Filter>
     </None>
@@ -92,6 +98,9 @@
       <Filter>Source Files</Filter>
     </None>
     <None Include="mbedtls_tlib.edl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="OuterData.edl">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

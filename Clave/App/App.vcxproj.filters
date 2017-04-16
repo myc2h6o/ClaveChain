@@ -22,9 +22,6 @@
     <ClInclude Include="Chain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Net.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Enclave_u.c">
@@ -37,9 +34,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Chain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Net.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mbedtls_sgx_u_net.c">

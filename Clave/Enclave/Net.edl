@@ -1,8 +1,0 @@
-enclave {
-    trusted {
-    };
-
-    untrusted {
-        void ocall_getDataFromUri([in, string] const char *uri, [in, out, string] char *data);
-    };
-};

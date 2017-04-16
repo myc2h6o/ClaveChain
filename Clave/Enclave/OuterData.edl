@@ -1,0 +1,9 @@
+enclave {
+    trusted {
+        public void ecall_initOuterDataServer([in, string] const char *name, [in, string] const char *port);
+        public void ecall_destroyOuterDataServer();
+    };
+
+    untrusted {
+    };
+};

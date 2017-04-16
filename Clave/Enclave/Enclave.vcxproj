@@ -57,21 +57,24 @@
     <ClCompile Include="Enclave_t.c" />
     <ClCompile Include="Keccak.cpp" />
     <ClCompile Include="mbedTlsSgxSignV.cpp" />
-    <ClCompile Include="Net.cpp" />
+    <ClCompile Include="OuterData.cpp" />
     <ClCompile Include="Output.cpp" />
     <ClCompile Include="RLP.cpp" />
     <ClCompile Include="Secret.cpp" />
+    <ClCompile Include="s_client.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ca_bundle.h" />
     <ClInclude Include="Chain.h" />
     <ClInclude Include="Enclave.h" />
     <ClInclude Include="Enclave_t.h" />
     <ClInclude Include="Keccak.h" />
     <ClInclude Include="mbedTlsSgxSignV.h" />
-    <ClInclude Include="Net.h" />
+    <ClInclude Include="OuterData.h" />
     <ClInclude Include="Output.h" />
     <ClInclude Include="RLP.h" />
     <ClInclude Include="Secret.h" />
+    <ClInclude Include="s_client.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Enclave.edl">
@@ -83,7 +86,7 @@
     <None Include="Chain.edl" />
     <None Include="Enclave_private.pem" />
     <None Include="mbedtls_tlib.edl" />
-    <None Include="Net.edl" />
+    <None Include="OuterData.edl" />
     <None Include="Output.edl" />
     <None Include="Secret.edl" />
   </ItemGroup>

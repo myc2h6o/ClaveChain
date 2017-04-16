@@ -2,7 +2,7 @@
 #include <string.h>
 #include "Chain.h"
 #include "Keccak.h"
-#include "Net.h"
+#include "OuterData.h"
 #include "Output.h"
 #include "RLP.h"
 #include "Secret.h"
@@ -33,9 +33,10 @@ void ecall_setContractAddress(const char *address) {
 }
 
 void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long id, const char *index, char *result) {
-    // get data
-    char name[UINT_256_BYTE_SIZE] = "StubName";
-    char phone[UINT_256_BYTE_SIZE] = "StubPhone";
+    // get data from tusted outer source
+    char name[OUTER_DATA_NAME_SIZE + 1] = "";
+    char phone[OUTER_DATA_PHONE_SIZE + 1] = "";
+    getCustomerInfo(index, name, phone);
 
     //get serialized transaction
     char *t_nonce = (char*)malloc(strlen(nonce) + 1);

@@ -35,7 +35,6 @@
 #endif
 
 #include "Clave.h"
-#include "Net.h"
 
 #ifndef TRUE
 # define TRUE 1
@@ -290,8 +289,4 @@ int Clave::init(void)
  */
 void ocall_printString(const char *str) {
     printf("%s", str);
-}
-
-void ocall_getDataFromUri(const char *uri, char *data) {
-    data = Net::getDataFromUri(uri);
 }

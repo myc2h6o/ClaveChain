@@ -6,7 +6,9 @@
 #include "Clave.h"
 
 #define MILLI_SECOND_WAIT_TIME 5000
-#define HOST "http://localhost:8545"
+#define GETH_ADDRESS "http://localhost:8545"
+#define OUTER_SERVER_NAME "www.ele.me"
+#define OUTER_SERVER_PORT "443"
 
 int main() {
     // Initialize enclave
@@ -31,14 +33,21 @@ int main() {
         getchar();
     }
 
+    // Set contract address in clave
     if (clave.setContractAddress(address.c_str()) < 0) {
         std::cout << "Failed to set contract address\n";
         getchar();
         return -1;
     }
+    // Initialize outer data server in clave
+    if (clave.initOuterDataServer(OUTER_SERVER_NAME, OUTER_SERVER_PORT) < 0) {
+        std::cout << "Failed to init outer data server\n";
+        getchar();
+        return -1;
+    }
 
     // Initialize chain
-    Chain::init(HOST, address);
+    Chain::init(GETH_ADDRESS, address);
 
     // Main loop
     std::cout << "Start main loop\n";
@@ -90,10 +99,11 @@ int main() {
         }
     }
 
-    std::cout << "Some Error happened\n";
+    std::cout << "Main loop end\n";
 
     // Destroy the enclave
     clave.freeKeyPair();
+    clave.destroyOuterDataServer();
     clave.destroy();
 
     // Destroy chain

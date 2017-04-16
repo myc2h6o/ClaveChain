@@ -46,7 +46,6 @@
     <ClInclude Include="Chain.h" />
     <ClInclude Include="Clave.h" />
     <ClInclude Include="Enclave_u.h" />
-    <ClInclude Include="Net.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
@@ -58,7 +57,6 @@
     </ClCompile>
     <ClCompile Include="mbedtls_sgx_u_net.c" />
     <ClCompile Include="mbedtls_sgx_u_std.c" />
-    <ClCompile Include="Net.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\Enclave\Enclave.edl">
