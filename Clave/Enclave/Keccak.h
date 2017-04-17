@@ -40,7 +40,8 @@ public:
     void add(const void* data, size_t numBytes);
     /// return latest hash as hex characters
     /*
-     * return: hex formed c string malloced by malloc(), end with '\0'
+     * return: 65(including the end '\0') bytes hex formed c string malloced by malloc()
+     * (two hex bytes represent 1 byte, 256 bits in all)
      */
     char* getHash();
     /// restart

@@ -16,6 +16,7 @@ int main() {
         return -1;
     }
 
+
     clave.generateKeyPair();
 
     //Set middle contract address on blockchain
