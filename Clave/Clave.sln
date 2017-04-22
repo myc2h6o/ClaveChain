@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Enclave", "Enclave\Enclave.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "App", "App\App.vcxproj", "{4B4E2012-F2B3-4583-A5C4-D17CFDF167B3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{388FB958-2199-4809-898B-2E90A6AC23CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Simulation|x86 = Simulation|x86
@@ -16,6 +18,8 @@ Global
 		{2FD71BEE-C9AA-4D5C-B0CD-945474083158}.Simulation|x86.Build.0 = Simulation|Win32
 		{4B4E2012-F2B3-4583-A5C4-D17CFDF167B3}.Simulation|x86.ActiveCfg = Simulation|Win32
 		{4B4E2012-F2B3-4583-A5C4-D17CFDF167B3}.Simulation|x86.Build.0 = Simulation|Win32
+		{388FB958-2199-4809-898B-2E90A6AC23CA}.Simulation|x86.ActiveCfg = Simulation|Win32
+		{388FB958-2199-4809-898B-2E90A6AC23CA}.Simulation|x86.Build.0 = Simulation|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
