@@ -39,7 +39,7 @@
     <ClCompile Include="Keccak.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rlp.cpp">
+    <ClCompile Include="RLP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,7 +65,7 @@
     <ClInclude Include="Keccak.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rlp.h">
+    <ClInclude Include="RLP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

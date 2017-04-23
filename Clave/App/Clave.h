@@ -4,6 +4,7 @@
 #include <string>
 #include "Enclave_u.h"
 #include "sgx_urts.h"
+#include "Chain.h"
 
 class Clave {
 public:
@@ -14,7 +15,7 @@ public:
     sgx_status_t setContractAddress(const char *address) { return ecall_setContractAddress(global_eid, address); }
     std::string getSignedTransactionFromRequest(const Request& req) {
         char *result = NULL;
-        sgx_status_t ret = ecall_getSignedTransactionFromRequest(global_eid, req, result);
+        sgx_status_t ret = ecall_getSignedTransactionFromRequest(global_eid, req.uri.c_str(), &result);
         return std::string(result);
     }
 private:

@@ -1,11 +1,7 @@
 enclave {
-    struct Request {
-        int tmp;
-    };
-
     trusted {
         public void ecall_setContractAddress([in, string] const char *address);
-        public void ecall_getSignedTransactionFromRequest(Request req, [in, out, string] char *result);
+        public void ecall_getSignedTransactionFromRequest([in, string] const char *uri, [user_check] char **result);
     };
 
     untrusted {

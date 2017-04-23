@@ -58,7 +58,7 @@
     <ClCompile Include="Keccak.cpp" />
     <ClCompile Include="Net.cpp" />
     <ClCompile Include="Output.cpp" />
-    <ClCompile Include="rlp.cpp" />
+    <ClCompile Include="RLP.cpp" />
     <ClCompile Include="Secret.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -68,7 +68,7 @@
     <ClInclude Include="Keccak.h" />
     <ClInclude Include="Net.h" />
     <ClInclude Include="Output.h" />
-    <ClInclude Include="rlp.h" />
+    <ClInclude Include="RLP.h" />
     <ClInclude Include="Secret.h" />
   </ItemGroup>
   <ItemGroup>

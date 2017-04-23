@@ -8,6 +8,9 @@
 #define MILLI_SECOND_WAIT_TIME 5000
 
 int main() {
+    // Initialize chain
+    Chain::init();
+
     // Initialize enclave
     Clave clave;
     if (clave.init() < 0) {
@@ -16,14 +19,13 @@ int main() {
         return -1;
     }
 
-
     clave.generateKeyPair();
 
     //Set middle contract address on blockchain
     std::string address;
     std::string confirmStr = "";
     while (confirmStr != "yes") {
-        std::cout << "Input middleman contracct address:" << std::endl;
+        std::cout << "Input middleman contract address:" << std::endl;
         std::cin >> address;
         std::cout << "Is this the correct middleman contract address:" << std::endl << address << std::endl;
         std::cout << "(Input yes to confirm, other to reinput):";
@@ -44,13 +46,24 @@ int main() {
     while (1) {
         std::vector<Request> requests = Chain::getRequests();
         nRequests = requests.size();
+        std::cout << "Got " << nRequests << " request(s)" << std::endl;
         if (nRequests == 0) {
             Sleep(MILLI_SECOND_WAIT_TIME);
         }
         else {
             for (size_t i = 0; i < nRequests; ++i) {
-                signedTransaction = clave.getSignedTransactionFromRequest(requests[i]);
-                Chain::callContract(signedTransaction);
+                // output requests
+                for (size_t i = 0; i < requests.size(); ++i) {
+                    std::cout << (requests[i].isDone ? "done   " : "undone ") << requests[i].uri << std::endl;
+                }
+
+                // get data and send result
+                if (!requests[i].isDone) {
+                    signedTransaction = clave.getSignedTransactionFromRequest(requests[i]);
+                    if (Chain::callContract(signedTransaction) == 0) {
+                        Chain::increaseId();
+                    }
+                }
             }
         }
     }
@@ -60,6 +73,10 @@ int main() {
     // Destroy the enclave
     clave.freeKeyPair();
     clave.destroy();
+
+    // Destroy chain
+    Chain::destroy();
+
     getchar();
     return 0;
 }
