@@ -289,9 +289,8 @@ int Clave::init(void)
  * OCall function to print string to terminal
  */
 void ocall_printString(const char *str) {
-    printf("Enclave: %s", str);
+    printf("%s", str);
 }
-
 
 void ocall_getDataFromUri(const char *uri, char *data) {
     data = Net::getDataFromUri(uri);

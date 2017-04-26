@@ -6,6 +6,7 @@
 #include "Clave.h"
 
 #define MILLI_SECOND_WAIT_TIME 5000
+#define CONTRACT_ADDRESS "0x9126f3fc2b6a5c554ffda1d7ae231092ad74ffb0"
 
 int main() {
     // Initialize chain
@@ -24,6 +25,7 @@ int main() {
     //Set middle contract address on blockchain
     std::string address;
     std::string confirmStr = "";
+/*
     while (confirmStr != "yes") {
         std::cout << "Input middleman contract address:" << std::endl;
         std::cin >> address;
@@ -32,8 +34,8 @@ int main() {
         std::cin >> confirmStr;
         getchar();
     }
-
-    if (clave.setContractAddress(address.c_str()) < 0) {
+*/
+    if (clave.setContractAddress(CONTRACT_ADDRESS) < 0) {
         std::cout << "Failed to set contract address\n";
         getchar();
         return -1;
@@ -53,14 +55,16 @@ int main() {
         else {
             for (size_t i = 0; i < nRequests; ++i) {
                 // output requests
-                for (size_t i = 0; i < requests.size(); ++i) {
-                    std::cout << (requests[i].isDone ? "done   " : "undone ") << requests[i].uri << std::endl;
-                }
+                std::cout << (requests[i].isDone ? "done   " : "undone ") << requests[i].uri << std::endl;
 
                 // get data and send result
                 if (!requests[i].isDone) {
                     signedTransaction = clave.getSignedTransactionFromRequest(requests[i]);
-                    if (Chain::callContract(signedTransaction) == 0) {
+                    std::cout << signedTransaction << std::endl;
+                    if (signedTransaction.empty()) {
+                        Chain::increaseId();
+                    }
+                    else if (Chain::callContract(signedTransaction) == 0) {
                         Chain::increaseId();
                     }
                 }

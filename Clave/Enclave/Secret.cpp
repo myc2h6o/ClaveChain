@@ -16,7 +16,6 @@
 #define PRIVATE_KEY_BYTE_SIZE 32
 #define PUBLIC_KEY_BYTE_SIZE 64
 #define ADDRESS_HEX_OFFSET 24
-#define SIGNATURE_BYTE_SIZE 32
 #define SIGNATURE_HEX_SIZE 64
 
 mbedtls_entropy_context entropy;
@@ -39,13 +38,28 @@ int HexToNumber(const char& x) {
 }
 
 void convertHexToBytes(char *hex) {
-    size_t len = strlen(hex);
-    for (size_t i = 0; i < len; i += 2) {
-        int high = HexToNumber(hex[i]);
-        int low = HexToNumber(hex[i + 1]);
-        hex[i >> 1] = (high << 4) | low;
+    if (hex == NULL) {
+        return;
     }
-    hex[len >> 1] = '\0';
+
+    size_t len = strlen(hex);
+    if (len % 2 == 0) {
+        for (size_t i = 0; i < len; i += 2) {
+            int high = HexToNumber(hex[i]);
+            int low = HexToNumber(hex[i + 1]);
+            hex[i >> 1] = (high << 4) | low;
+        }
+        hex[len >> 1] = '\0';
+    }
+    else {
+        hex[0] = HexToNumber(hex[0]);
+        for (size_t i = 1; i < len; i += 2) {
+            int high = HexToNumber(hex[i]);
+            int low = HexToNumber(hex[i + 1]);
+            hex[(i >> 1) + 1] = (high << 4) | low;
+        }
+        hex[(len >> 1) + 1] = '\0';
+    }
 }
 
 void getHexFromBytes(char *hex, const unsigned char *bytes, const int& byteSize) {
