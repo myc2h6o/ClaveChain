@@ -163,20 +163,8 @@ void ecall_generateKeyPair() {
 
     //output address
     printAddress();
-    // [TODO] remove output of private key and test signature in use, output private key only for testing convenience
+    // [TODO] remove output of private key in use, output private key only for testing convenience
     printPrivateKey();
-    char *sigr = NULL;
-    char *sigs = NULL;
-    char sigv = 0;
-    if (sign("hello world", 11, &sigr, &sigs, &sigv) != 0) {
-        oprintf("sign failed\n");
-        return;
-    }
-    oprintf("r:%s\n", sigr);
-    oprintf("s:%s\n", sigs);
-    oprintf("v:%x\n", sigv);
-    free(sigr);
-    free(sigs);
 }
 
 void ecall_freeKeyPair() {

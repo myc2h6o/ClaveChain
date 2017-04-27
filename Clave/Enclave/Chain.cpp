@@ -15,7 +15,7 @@
 #define CONTRACT_ADDRESS_BYTE_SIZE 20
 #define SIGNED_TRANSACTION_MAX_SIZE 2048
 
-char contractAddress[CONTRACT_ADDRESS_BYTE_SIZE * 2];
+char contractAddress[CONTRACT_ADDRESS_BYTE_SIZE * 2 + 1];
 
 void printRlp(const unsigned char *rlp, unsigned int length) {
     // check rlp
@@ -28,6 +28,7 @@ void printRlp(const unsigned char *rlp, unsigned int length) {
 
 void ecall_setContractAddress(const char *address) {
     memcpy(contractAddress, address, CONTRACT_ADDRESS_BYTE_SIZE * 2);
+    contractAddress[CONTRACT_ADDRESS_BYTE_SIZE * 2] = '\0';
     convertHexToBytes(contractAddress);
 }
 
@@ -68,9 +69,9 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long
     sign((char*)rlp, rlpLength, &sigr, &sigs, &sigv);
 
     // get rlp with signature
-    setRLPStringItem(items + 6, sigr, SIGNATURE_BYTE_SIZE);
-    setRLPStringItem(items + 7, sigs, SIGNATURE_BYTE_SIZE);
-    setRLPStringItem(items + 8, &sigv, 1, false);
+    setRLPStringItem(items + 6, &sigv, 1, false);
+    setRLPStringItem(items + 7, sigr, SIGNATURE_BYTE_SIZE);
+    setRLPStringItem(items + 8, sigs, SIGNATURE_BYTE_SIZE);
     rlpLength = RLP::encodeArray(&rlp, items, 9);
 
     // output result

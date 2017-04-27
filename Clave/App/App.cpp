@@ -22,11 +22,10 @@ int main() {
     }
 
     clave.generateKeyPair();
-
+/*
     //Set middle contract address on blockchain
     std::string address;
     std::string confirmStr = "";
-/*
     while (confirmStr != "yes") {
         std::cout << "Input middleman contract address:" << std::endl;
         std::cin >> address;
@@ -56,7 +55,7 @@ int main() {
         else {
             for (size_t i = 0; i < nRequests; ++i) {
                 // output requests
-                std::cout << (requests[i].isDone ? "done   " : "undone ") << requests[i].uri << std::endl;
+                //std::cout << (requests[i].isDone ? "done   " : "undone ") << requests[i].uri << std::endl;
                 if (requests[i].isDone) {
                     continue;
                 }
@@ -65,7 +64,6 @@ int main() {
                 // get data and send result
                 while (1) {
                     signedTransaction = clave.getSignedTransactionFromRequest(Chain::getHexNonce(), requests[i]);
-                    std::cout << signedTransaction << std::endl;
                     if (signedTransaction.empty()) {
                         // data or uri too large
                         Chain::increaseId();

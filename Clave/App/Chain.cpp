@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
+#include <string>
 #include "Chain.h"
 
 #define HEX_PREFIX_OFFSET 2
@@ -63,7 +65,34 @@ std::vector<Request> Chain::getRequests() {
  *   CALL_CONTRACT_NONCE_TOO_LOW: nonce too low
  */
 T_CallContract Chain::callContract(const std::string& signedTransaction) {
-    // [TODO] call block chain contract
+    std::string json = "{\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0x";
+    json += signedTransaction;
+    json += "\"],\"id\":1}";
+    int ret = curlPostJson(json);
+    if (ret != CURLE_OK) {
+        return CALL_CONTRACT_FAIL;
+    }
+
+    // nonce too low
+    int pos = curlRetData.find("Nonce too low");
+    if (pos != -1) {
+        return CALL_CONTRACT_NONCE_TOO_LOW;
+    }
+
+    // print transaction hash
+    pos = curlRetData.find("result");
+    if (pos == -1) {
+        // unknown return error
+        std::cout << curlRetData;
+        return CALL_CONTRACT_OK;
+    }
+    pos += RESULT_OFFSET;
+    int posR = curlRetData.find('"', pos);
+    if (posR == -1) {
+        return CALL_CONTRACT_OK;
+    }
+    std::cout << "Tx Hash: " << curlRetData.substr(pos, posR - pos) << std::endl;
+
     return CALL_CONTRACT_OK;
 }
 
@@ -92,8 +121,6 @@ unsigned long long Chain::getRemoteId() {
     return remoteId;
 }
 
-#include <iostream>
-#include <string>
 Request Chain::getRequest(const unsigned long long& id) {
     Request result;
     result.id = id;
