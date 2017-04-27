@@ -15,7 +15,7 @@ char contractAddress[CONTRACT_ADDRESS_BYTE_SIZE * 2];
 
 void printRlp(const unsigned char *rlp, unsigned int length) {
     // check rlp
-    for (int i = 0; i < length; ++i) {
+    for (unsigned int i = 0; i < length; ++i) {
         oprintf("%c", "0123456789abcdef"[rlp[i] >> 4]);
         oprintf("%c", "0123456789abcdef"[rlp[i] & 15]);
     }
@@ -27,7 +27,7 @@ void ecall_setContractAddress(const char *address) {
     convertHexToBytes(contractAddress);
 }
 
-void ecall_getSignedTransactionFromRequest(const char *uri, char *result) {
+void ecall_getSignedTransactionFromRequest(const char *nonce, const char *uri, char *result) {
     // get data
     char *outerData = getDataFromUri(uri);
     if (outerData == NULL) {
@@ -38,7 +38,8 @@ void ecall_getSignedTransactionFromRequest(const char *uri, char *result) {
     }
 
     //get serialized transaction
-    char t_nonce[] = "1";
+    char *t_nonce = (char*)malloc(strlen(nonce) + 1);
+    memcpy(t_nonce, nonce, strlen(nonce) + 1);
     char t_gasPrice[] = "";
     char t_gasLimit[] = "100000";
     char t_value[] = "";
@@ -78,6 +79,7 @@ void ecall_getSignedTransactionFromRequest(const char *uri, char *result) {
 
     // clean up
     free(outerData);
+    free(t_nonce);
     free(rlp);
     free(sigr);
     free(sigs);

@@ -15,6 +15,7 @@ curl_slist *header = NULL;
 std::string curlRetData = "";
 
 unsigned long long Chain::currentId = 0;
+unsigned long long Chain::nonce = 1;
 std::string Chain::address = "";
 
 void Chain::init(const std::string& _host, const std::string& _address) {
@@ -57,12 +58,13 @@ std::vector<Request> Chain::getRequests() {
  * callContract: call contract on blockchain
  * signedTransaction: signed transaction for calling contract
  * return:
- *   0: succeed
- *   -1: fail
+ *   CALL_CONTRACT_OK: succeed
+ *   CALL_CONTRACT_FAIL: fail
+ *   CALL_CONTRACT_NONCE_TOO_LOW: nonce too low
  */
-int Chain::callContract(const std::string& signedTransaction) {
+T_CallContract Chain::callContract(const std::string& signedTransaction) {
     // [TODO] call block chain contract
-    return 0;
+    return CALL_CONTRACT_OK;
 }
 
 /*
@@ -126,14 +128,14 @@ Request Chain::getRequest(const unsigned long long& id) {
     // get uri length
     pos += HEX_BOOL_SIZE + HEX_UINT64_OFFSET;
     std::string hexUriLength = curlRetData.substr(pos, HEX_UINT64_SIZE);
-    unsigned long long uriLength = 0;
+    unsigned long long  uriLength = 0;
     sscanf_s(hexUriLength.c_str(), "%llx", &uriLength);
 
     // get uri
     pos += HEX_UINT64_SIZE;
     std::string hexUri = curlRetData.substr(pos, uriLength * 2);
     result.uri.resize(uriLength);
-    for (int i = 0; i < uriLength; ++i) {
+    for (unsigned long long i = 0; i < uriLength; ++i) {
         sscanf_s(hexUri.substr(2 * i, 2).c_str(), "%x", &(result.uri[i]));
     }
 
@@ -151,4 +153,11 @@ size_t Chain::WriteMemoryCallback(char *src, size_t size, size_t nmemb, std::str
     size_t length = size * nmemb;
     *dst = std::string(src, length);
     return length;
+}
+
+std::string Chain::getHexNonce() {
+    char buf[HEX_UINT64_SIZE];
+    sprintf_s(buf, "%llx", nonce);
+    std::string result = std::string(buf);
+    return result;
 }

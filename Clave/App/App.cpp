@@ -57,17 +57,36 @@ int main() {
             for (size_t i = 0; i < nRequests; ++i) {
                 // output requests
                 std::cout << (requests[i].isDone ? "done   " : "undone ") << requests[i].uri << std::endl;
+                if (requests[i].isDone) {
+                    continue;
+                }
 
+                bool fail = false;
                 // get data and send result
-                if (!requests[i].isDone) {
-                    signedTransaction = clave.getSignedTransactionFromRequest(requests[i]);
+                while (1) {
+                    signedTransaction = clave.getSignedTransactionFromRequest(Chain::getHexNonce(), requests[i]);
                     std::cout << signedTransaction << std::endl;
                     if (signedTransaction.empty()) {
+                        // data or uri too large
                         Chain::increaseId();
+                        break;
                     }
-                    else if (Chain::callContract(signedTransaction) == 0) {
+                    T_CallContract ret = Chain::callContract(signedTransaction);
+                    if (ret == CALL_CONTRACT_OK) {
                         Chain::increaseId();
+                        Chain::increaseNonce();
+                        break;
                     }
+                    else if (ret == CALL_CONTRACT_NONCE_TOO_LOW) {
+                        Chain::increaseNonce();
+                    }
+                    else if (ret == CALL_CONTRACT_FAIL) {
+                        fail = true;
+                        break;
+                    }
+                }
+                if (fail) {
+                    break;
                 }
             }
         }

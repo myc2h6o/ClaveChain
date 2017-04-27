@@ -15,8 +15,8 @@ public:
     sgx_status_t generateKeyPair() { return ecall_generateKeyPair(global_eid); }
     sgx_status_t freeKeyPair() { return ecall_freeKeyPair(global_eid); }
     sgx_status_t setContractAddress(const char *address) { return ecall_setContractAddress(global_eid, address); }
-    std::string getSignedTransactionFromRequest(const Request& req) {
-        sgx_status_t ret = ecall_getSignedTransactionFromRequest(global_eid, req.uri.c_str(), eResult);
+    std::string getSignedTransactionFromRequest(const std::string& nonce, const Request& req) {
+        sgx_status_t ret = ecall_getSignedTransactionFromRequest(global_eid, nonce.c_str(), req.uri.c_str(), eResult);
         std::string result = std::string(eResult);
         return result;
     }
