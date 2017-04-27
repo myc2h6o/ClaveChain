@@ -7,6 +7,7 @@
 #include "mbedtls/ctr_drbg.h"
 #include "mbedtls/ecdsa.h"
 #include "mbedtls/entropy.h"
+#include "mbedTlsSgxSignV.h"
 
 /*
  * Use MBEDTLS_ECP_DP_SECP256K1, private key size is 32 bytes, public key size is 65 bytes (with 0x04 as first byte)
@@ -118,23 +119,30 @@ int sign(const char *message, const size_t& messageSize, char **sigr, char **sig
     char *hash = keccak.getHash();
     size_t hashSize = strlen(hash) / 2;
     convertHexToBytes(hash);
-    mbedtls_mpi_uint v; // mbedtls_ecdsa_sign_bitcoin will transform char *v into mbedtls_mpi_uint*, so make it a mbedtls_mpi_uint here
+    uint8_t v;
     mbedtls_mpi r;
     mbedtls_mpi s;
     mbedtls_mpi_init(&r);
     mbedtls_mpi_init(&s);
-    int ret = mbedtls_ecdsa_sign_bitcoin(&ecdsaContext.grp, &r, &s, (char*)&v, &ecdsaContext.d, (unsigned char*)hash, hashSize, MBEDTLS_MD_SHA256);
-    if (ret == 0) {
+    *sigr = (char*)malloc(SIGNATURE_HEX_SIZE + 1);
+    *sigs = (char*)malloc(SIGNATURE_HEX_SIZE + 1);
+
+    int ret = 1;
+    while (ret != 0) {
+        ret = mbedtls_ecdsa_sign_with_v(&ecdsaContext.grp, &r, &s, &v, &ecdsaContext.d, (unsigned char*)hash, hashSize, mbedtls_ctr_drbg_random, &ctr_drbg);
         *sigv = v;
         unsigned char sigBytes[SIGNATURE_BYTE_SIZE];
-        *sigr = (char*)malloc(SIGNATURE_HEX_SIZE + 1);
         mbedtls_mpi_write_binary(&r, sigBytes, SIGNATURE_BYTE_SIZE);
         getHexFromBytes(*sigr, sigBytes, SIGNATURE_BYTE_SIZE);
         (*sigr)[SIGNATURE_HEX_SIZE] = '\0';
-        *sigs = (char*)malloc(SIGNATURE_HEX_SIZE + 1);
         mbedtls_mpi_write_binary(&s, sigBytes, SIGNATURE_BYTE_SIZE);
         getHexFromBytes(*sigs, sigBytes, SIGNATURE_BYTE_SIZE);
         (*sigs)[SIGNATURE_HEX_SIZE] = '\0';
+
+        // signature start with zero byte is not allowed
+        if (((*sigr)[0] == '0' && (*sigr)[1] == '0') || ((*sigs)[0] == '0' && (*sigs)[1] == '0')) {
+            ret = 1;
+        }
     }
 
     free(hash);

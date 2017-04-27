@@ -42,6 +42,9 @@
     <ClCompile Include="RLP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="mbedTlsSgxSignV.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enclave_t.h">
@@ -66,6 +69,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RLP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mbedTlsSgxSignV.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
