@@ -11,7 +11,7 @@
 #define CONTRACT_ADDRESS_BYTE_SIZE 20
 #define SIGNED_TRANSACTION_MAX_SIZE 2048
 
-unsigned char contractAddress[CONTRACT_ADDRESS_BYTE_SIZE * 2];
+char contractAddress[CONTRACT_ADDRESS_BYTE_SIZE * 2];
 
 void printRlp(const unsigned char *rlp, unsigned int length) {
     // check rlp
@@ -24,72 +24,70 @@ void printRlp(const unsigned char *rlp, unsigned int length) {
 
 void ecall_setContractAddress(const char *address) {
     memcpy(contractAddress, address, CONTRACT_ADDRESS_BYTE_SIZE * 2);
-    convertHexToBytes((char*)contractAddress);
+    convertHexToBytes(contractAddress);
 }
 
 void ecall_getSignedTransactionFromRequest(const char *uri, char *result) {
     // get data
-    char *data = getDataFromUri(uri);
-    if (data == NULL) {
-        data = (char*)malloc(1);
-        data[0] = '\0';
+    char *outerData = getDataFromUri(uri);
+    if (outerData == NULL) {
+        char noDataHint[] = "No outer data";
+        int hintLength = strlen(noDataHint);
+        outerData = (char*)malloc(hintLength + 1);
+        memcpy(outerData, "No outer data", hintLength + 1);
     }
 
     //get serialized transaction
-    unsigned char t_nonce[] = "01";
-    unsigned char t_gasPrice[] = "";
-    unsigned char t_gasLimit[] = "100000";
-    unsigned char t_value[] = "";
-    unsigned char t_data[] = "f47f3aecb83e3a75f67420571b3d52ae26c64489376e4e3700000000000000000000000001234567000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000d6162636465666768696a6b6c6d00000000000000000000000000000000000000";
-    RLPStringItem items[6];
-
-    convertHexToBytes((char*)t_nonce);
-    convertHexToBytes((char*)t_gasLimit);
-    convertHexToBytes((char*)t_data);
-    items[0].str = t_nonce;
-    items[0].length = 1;
-    items[1].str = t_gasPrice;
-    items[1].length = 0;
-    items[2].str = t_gasLimit;
-    items[2].length = 3;
-    items[3].str = contractAddress;
-    items[3].length = CONTRACT_ADDRESS_BYTE_SIZE;
-    items[4].str = t_value;
-    items[4].length = 0;
-    items[5].str = t_data;
-    items[5].length = 164;
+    char t_nonce[] = "1";
+    char t_gasPrice[] = "";
+    char t_gasLimit[] = "100000";
+    char t_value[] = "";
+    char t_data[] = "f47f3aecb83e3a75f67420571b3d52ae26c64489376e4e3700000000000000000000000001234567000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000d6162636465666768696a6b6c6d00000000000000000000000000000000000000";
+    RLPStringItem items[9];
     unsigned char *rlp = NULL;
-    unsigned int length = RLP::encodeArray(&rlp, items, 6);
+    unsigned int rlpLength = 0;
+
+    setRLPStringItem(items, t_nonce, (strlen(t_nonce) + 1) / 2);
+    setRLPStringItem(items + 1, t_gasPrice, (strlen(t_gasPrice) + 1) / 2);
+    setRLPStringItem(items + 2, t_gasLimit, (strlen(t_gasLimit) + 1) / 2);
+    setRLPStringItem(items + 3, contractAddress, CONTRACT_ADDRESS_BYTE_SIZE, false);
+    setRLPStringItem(items + 4, t_value, (strlen(t_value) + 1) / 2);
+    setRLPStringItem(items + 5, t_data, (strlen(t_data) + 1) / 2);
+    rlpLength = RLP::encodeArray(&rlp, items, 6);
 
     // sign transaction
     char *sigr = NULL;
     char *sigs = NULL;
-    char sigv;
-    sign((char*)rlp, length, &sigr, &sigs, &sigv);
+    char sigv = '\0';
+    sign((char*)rlp, rlpLength, &sigr, &sigs, &sigv);
 
     // get rlp with signature
-    convertHexToBytes(sigr);
-    convertHexToBytes(sigs);
-    items[6].str = (unsigned char*)sigr;
-    items[6].length = SIGNATURE_BYTE_SIZE;
-    items[7].str = (unsigned char*)sigs;
-    items[7].length = SIGNATURE_BYTE_SIZE;
-    items[8].str = (unsigned char*)&sigv;
-    items[8].length = 1;
-    length = RLP::encodeArray(&rlp, items, 9);
+    setRLPStringItem(items + 6, sigr, SIGNATURE_BYTE_SIZE);
+    setRLPStringItem(items + 7, sigs, SIGNATURE_BYTE_SIZE);
+    setRLPStringItem(items + 8, &sigv, 1, false);
+    rlpLength = RLP::encodeArray(&rlp, items, 9);
 
     // output result
-    if (length > SIGNED_TRANSACTION_MAX_SIZE / 2) {
+    if (rlpLength > SIGNED_TRANSACTION_MAX_SIZE / 2) {
         result[0] = '\0';
     }
     else {
-        getHexFromBytes(result, rlp, length);
-        result[2 * length] = '\0';
+        getHexFromBytes(result, rlp, rlpLength);
+        result[2 * rlpLength] = '\0';
     }
 
     // clean up
-    free(data);
+    free(outerData);
     free(rlp);
     free(sigr);
     free(sigs);
+}
+
+
+void setRLPStringItem(RLPStringItem * item, char *str, const unsigned long long length, bool toBytes) {
+    if ((length != 0) && toBytes) {
+        convertHexToBytes((char*)str);
+    }
+    item->str = (unsigned char*)str;
+    item->length = length;
 }

@@ -41,15 +41,17 @@ void convertHexToBytes(char *hex) {
     if (hex == NULL) {
         return;
     }
-
     size_t len = strlen(hex);
+    if (len == 0) {
+        return;
+    }
+
     if (len % 2 == 0) {
         for (size_t i = 0; i < len; i += 2) {
             int high = HexToNumber(hex[i]);
             int low = HexToNumber(hex[i + 1]);
             hex[i >> 1] = (high << 4) | low;
         }
-        hex[len >> 1] = '\0';
     }
     else {
         hex[0] = HexToNumber(hex[0]);
@@ -58,7 +60,6 @@ void convertHexToBytes(char *hex) {
             int low = HexToNumber(hex[i + 1]);
             hex[(i >> 1) + 1] = (high << 4) | low;
         }
-        hex[(len >> 1) + 1] = '\0';
     }
 }
 
