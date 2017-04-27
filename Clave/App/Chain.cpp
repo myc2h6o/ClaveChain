@@ -12,15 +12,16 @@
 
 CURL *curl = NULL;
 curl_slist *header = NULL;
-std::string host = "http://localhost:8545";
-std::string curlRetData;
+std::string curlRetData = "";
 
 unsigned long long Chain::currentId = 0;
+std::string Chain::address = "";
 
-void Chain::init() {
+void Chain::init(const std::string& _host, const std::string& _address) {
+    address = _address;
     curl_global_init(CURL_GLOBAL_ALL);
     curl = curl_easy_init();
-    curl_easy_setopt(curl, CURLOPT_URL, host.c_str());
+    curl_easy_setopt(curl, CURLOPT_URL, _host.c_str());
     curl_easy_setopt(curl, CURLOPT_USERAGENT, "libcurl-agent/1.0");
     header = curl_slist_append(NULL, "Content-Type:application/json;charset=UTF-8");
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, header);
@@ -69,7 +70,9 @@ int Chain::callContract(const std::string& signedTransaction) {
  * return currentId if cannot get remote id
  */
 unsigned long long Chain::getRemoteId() {
-    std::string json = "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x9126f3fc2b6a5c554ffda1d7ae231092ad74ffb0\",\"data\":\"0xe00dd161\"},\"latest\"],\"id\":1}";
+    std::string json = "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x";
+    json += address;
+    json += "\",\"data\":\"0xe00dd161\"},\"latest\"],\"id\":1}";
     int ret = curlPostJson(json);
     if (ret != CURLE_OK) {
         return currentId;
@@ -98,7 +101,9 @@ Request Chain::getRequest(const unsigned long long& id) {
     char hexId[HEX_UINT64_SIZE + 1];
     sprintf_s(hexId, "%016llx", id);
 
-    std::string json = "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x9126f3fc2b6a5c554ffda1d7ae231092ad74ffb0\",\"data\":\"0x411010ec000000000000000000000000000000000000000000000000";
+    std::string json = "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x";
+    json += address;
+    json += "\",\"data\":\"0x411010ec000000000000000000000000000000000000000000000000";
     json += hexId;
     json += "\"},\"latest\"],\"id\":1}";
     int ret = curlPostJson(json);

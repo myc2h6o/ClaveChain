@@ -6,11 +6,12 @@
 #include "Clave.h"
 
 #define MILLI_SECOND_WAIT_TIME 5000
-#define CONTRACT_ADDRESS "0x9126f3fc2b6a5c554ffda1d7ae231092ad74ffb0"
+#define HOST "http://localhost:8545"
+#define ADDRESS "9126f3fc2b6a5c554ffda1d7ae231092ad74ffb0"
 
 int main() {
     // Initialize chain
-    Chain::init();
+    Chain::init(HOST, ADDRESS);
 
     // Initialize enclave
     Clave clave;
@@ -35,7 +36,7 @@ int main() {
         getchar();
     }
 */
-    if (clave.setContractAddress(CONTRACT_ADDRESS) < 0) {
+    if (clave.setContractAddress(ADDRESS) < 0) {
         std::cout << "Failed to set contract address\n";
         getchar();
         return -1;

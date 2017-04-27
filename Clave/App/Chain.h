@@ -13,7 +13,7 @@ struct Request {
 
 class Chain {
 public:
-    static void init();
+    static void init(const std::string& _host, const std::string& _address);
     static void destroy();
     static std::vector<Request> getRequests();
     static int callContract(const std::string& signedTransaction);
@@ -24,6 +24,7 @@ private:
     static Request getRequest(const unsigned long long& id);
     static CURLcode curlPostJson(std::string json);
     static size_t WriteMemoryCallback(char *src, size_t size, size_t nmemb, std::string *dst);
+    static std::string address;
 };
 
 #endif

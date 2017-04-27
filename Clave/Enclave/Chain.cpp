@@ -8,10 +8,10 @@
 #include "Secret.h"
 #include "Enclave_t.h"
 
-#define CONTRACT_ADDRESS_SIZE 40
+#define CONTRACT_ADDRESS_BYTE_SIZE 20
 #define SIGNED_TRANSACTION_MAX_SIZE 2048
 
-char contractAddress[CONTRACT_ADDRESS_SIZE + 1];
+unsigned char contractAddress[CONTRACT_ADDRESS_BYTE_SIZE * 2];
 
 void printRlp(const unsigned char *rlp, unsigned int length) {
     // check rlp
@@ -23,8 +23,8 @@ void printRlp(const unsigned char *rlp, unsigned int length) {
 }
 
 void ecall_setContractAddress(const char *address) {
-    memcpy(contractAddress, address, CONTRACT_ADDRESS_SIZE);
-    contractAddress[CONTRACT_ADDRESS_SIZE] = '\0';
+    memcpy(contractAddress, address, CONTRACT_ADDRESS_BYTE_SIZE * 2);
+    convertHexToBytes((char*)contractAddress);
 }
 
 void ecall_getSignedTransactionFromRequest(const char *uri, char *result) {
@@ -39,14 +39,12 @@ void ecall_getSignedTransactionFromRequest(const char *uri, char *result) {
     unsigned char t_nonce[] = "01";
     unsigned char t_gasPrice[] = "";
     unsigned char t_gasLimit[] = "100000";
-    unsigned char t_addr[] = "9126f3fc2b6a5c554ffda1d7ae231092ad74ffb0";
     unsigned char t_value[] = "";
     unsigned char t_data[] = "f47f3aecb83e3a75f67420571b3d52ae26c64489376e4e3700000000000000000000000001234567000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000d6162636465666768696a6b6c6d00000000000000000000000000000000000000";
     RLPStringItem items[6];
 
     convertHexToBytes((char*)t_nonce);
     convertHexToBytes((char*)t_gasLimit);
-    convertHexToBytes((char*)t_addr);
     convertHexToBytes((char*)t_data);
     items[0].str = t_nonce;
     items[0].length = 1;
@@ -54,8 +52,8 @@ void ecall_getSignedTransactionFromRequest(const char *uri, char *result) {
     items[1].length = 0;
     items[2].str = t_gasLimit;
     items[2].length = 3;
-    items[3].str = t_addr;
-    items[3].length = 20;
+    items[3].str = contractAddress;
+    items[3].length = CONTRACT_ADDRESS_BYTE_SIZE;
     items[4].str = t_value;
     items[4].length = 0;
     items[5].str = t_data;
