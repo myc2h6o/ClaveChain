@@ -96,6 +96,7 @@ unsigned long long Chain::getRemoteId() {
 #include <string>
 Request Chain::getRequest(const unsigned long long& id) {
     Request result;
+    result.id = id;
     result.isDone = true;
     result.uri = "";
 

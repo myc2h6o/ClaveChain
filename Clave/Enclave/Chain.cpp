@@ -27,7 +27,7 @@ void ecall_setContractAddress(const char *address) {
     convertHexToBytes(contractAddress);
 }
 
-void ecall_getSignedTransactionFromRequest(const char *nonce, const char *uri, char *result) {
+void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long id, const char *uri, char *result) {
     // get data
     char *outerData = getDataFromUri(uri);
     if (outerData == NULL) {
@@ -43,7 +43,7 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, const char *uri, c
     char t_gasPrice[] = "";
     char t_gasLimit[] = "100000";
     char t_value[] = "";
-    char t_data[] = "f47f3aecb83e3a75f67420571b3d52ae26c64489376e4e3700000000000000000000000001234567000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000d6162636465666768696a6b6c6d00000000000000000000000000000000000000";
+    char t_data[] = "";
     RLPStringItem items[9];
     unsigned char *rlp = NULL;
     unsigned int rlpLength = 0;
