@@ -3,6 +3,7 @@
 
 #include "RLP.h"
 
-void setRLPStringItem(RLPStringItem * item, char *str, const unsigned long long length, bool toBytes = true);
+void setRLPStringItem(RLPStringItem * item, char *str, const unsigned int length, bool toBytes = true);
+unsigned int generateTransactionData(char **dst, const unsigned long long& id, const char *uri, const char *data);
 
 #endif

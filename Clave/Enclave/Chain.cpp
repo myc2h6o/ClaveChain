@@ -8,6 +8,10 @@
 #include "Secret.h"
 #include "Enclave_t.h"
 
+#define FUNC_BYTE_CODE_SIZE 4
+#define UINT_256_BYTE_SIZE 32
+#define UINT_64_BYTE_OFFSET 24
+#define UINT_64_BYTE_SIZE 8
 #define CONTRACT_ADDRESS_BYTE_SIZE 20
 #define SIGNED_TRANSACTION_MAX_SIZE 2048
 
@@ -43,7 +47,8 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long
     char t_gasPrice[] = "";
     char t_gasLimit[] = "100000";
     char t_value[] = "";
-    char t_data[] = "";
+    char *t_data = NULL;
+    int t_dataLength = generateTransactionData(&t_data, id, uri, outerData);
     RLPStringItem items[9];
     unsigned char *rlp = NULL;
     unsigned int rlpLength = 0;
@@ -53,7 +58,7 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long
     setRLPStringItem(items + 2, t_gasLimit, (strlen(t_gasLimit) + 1) / 2);
     setRLPStringItem(items + 3, contractAddress, CONTRACT_ADDRESS_BYTE_SIZE, false);
     setRLPStringItem(items + 4, t_value, (strlen(t_value) + 1) / 2);
-    setRLPStringItem(items + 5, t_data, (strlen(t_data) + 1) / 2);
+    setRLPStringItem(items + 5, t_data, t_dataLength, false);
     rlpLength = RLP::encodeArray(&rlp, items, 6);
 
     // sign transaction
@@ -80,16 +85,75 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long
     // clean up
     free(outerData);
     free(t_nonce);
+    free(t_data);
     free(rlp);
     free(sigr);
     free(sigs);
 }
 
 
-void setRLPStringItem(RLPStringItem * item, char *str, const unsigned long long length, bool toBytes) {
+void setRLPStringItem(RLPStringItem * item, char *str, const unsigned int length, bool toBytes) {
     if ((length != 0) && toBytes) {
         convertHexToBytes((char*)str);
     }
     item->str = (unsigned char*)str;
     item->length = length;
+}
+
+unsigned int padTo32(const unsigned int v) {
+    return (v + 31) / 32 * 32;
+}
+
+void setUint64ToBytes(char *dst, unsigned long long u) {
+    for (int i = 0; i < UINT_64_BYTE_SIZE; ++i){
+        dst[UINT_64_BYTE_SIZE - i - 1] = u & 0xff;
+        u >>= 8;
+    }
+}
+
+unsigned int generateTransactionData(char **dst, const unsigned long long& id, const char *uri, const char *data) {
+    unsigned int uriLength = strlen(uri);
+    unsigned int dataLength = strlen(data);
+    unsigned int uriPaddedLength = padTo32(uriLength);
+    unsigned int dataPaddedLength = padTo32(dataLength);
+    unsigned int length = FUNC_BYTE_CODE_SIZE + UINT_256_BYTE_SIZE * 5 + uriPaddedLength + dataPaddedLength;
+
+    // init data to all '0'
+    *dst = (char*)malloc(length);
+    memset(*dst, 0, length);
+    char *pos = *dst;
+
+    // byte code of function Send()
+    char funcByteCode[] = { (char)0x88, (char)0x13, (char)0xb4, (char)0x77 };
+    memcpy(pos, funcByteCode, 4);
+    pos += FUNC_BYTE_CODE_SIZE;
+
+    // id
+    setUint64ToBytes(pos + UINT_64_BYTE_OFFSET, id);
+    pos += UINT_256_BYTE_SIZE;
+
+    // uri string position
+    setUint64ToBytes(pos + UINT_64_BYTE_OFFSET, UINT_256_BYTE_SIZE * 3);
+    pos += UINT_256_BYTE_SIZE;
+
+    // data string position
+    setUint64ToBytes(pos + UINT_64_BYTE_OFFSET, UINT_256_BYTE_SIZE * 4 + uriPaddedLength);
+    pos += UINT_256_BYTE_SIZE;
+
+    // uri string length
+    setUint64ToBytes(pos + UINT_64_BYTE_OFFSET, uriLength);
+    pos += UINT_256_BYTE_SIZE;
+
+    // uri string
+    memcpy(pos, uri, uriLength);
+    pos += uriPaddedLength;
+
+    // data string length
+    setUint64ToBytes(pos + UINT_64_BYTE_OFFSET, dataLength);
+    pos += UINT_256_BYTE_SIZE;
+
+    // data string
+    memcpy(pos, data, dataLength);
+
+    return length;
 }
