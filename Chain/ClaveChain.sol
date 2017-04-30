@@ -1,4 +1,5 @@
 pragma solidity ^0.4.0;
+
 contract ClaveChain
 {
     struct Request
@@ -21,7 +22,7 @@ contract ClaveChain
         currentId = 0;
     }
 
-    function Register(address requester, bytes4 callback, string uri) public returns(uint256)
+    function Register(address requester, bytes4 callback, string uri) public returns(uint64)
     {
         // [TODO] store eth value
         uint64 id = currentId;

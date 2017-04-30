@@ -1,19 +1,21 @@
 pragma solidity ^0.4.0;
-import "github.com/mycspring/ClaveChain/Chain/ClaveChain.sol";
 
-contract HelloClave
+import "github.com/mycspring/ClaveChain/Chain/IClaveChain.sol";
+
+contract HelloClave is IClaveChain
 {
-    bytes4 callbackSignature = 0x9d8d06b7;
-    ClaveChain claveChain;
+    bytes4 callback = 0x9d8d06b7;
+    IClaveChain public claveChain;
     string public data;
-    function HelloClave(ClaveChain _claveChain) public
+    uint64 public reqid;
+    function HelloClave(IClaveChain _claveChain) public
     {
         claveChain = _claveChain;
     }
     
     function getOutDataFrom(string uri) public
     {
-        claveChain.Register(this, callbackSignature, uri);
+        reqid = claveChain.Register(this, callback, uri);
     }
     
     function setData(uint64 requestId, string _data) public
