@@ -1,35 +1,33 @@
 pragma solidity ^0.4.0;
 
-contract ClaveChain
+contract KycClaveChain
 {
     struct Request
     {
         address requester;
         bytes4 callback;
-        string uri;
+        bytes18 index;
         bool isDone;
     }
     
-    address creator;
     address clave;
     uint64 public currentId;
     mapping (uint64 => Request) public requests;
  
-    function ClaveChain(address _clave) public
+    function KycClaveChain(address _clave) public
     {
-        creator = msg.sender;
         clave = _clave;
         currentId = 0;
     }
 
-    function Register(address requester, bytes4 callback, string uri) public returns(uint64)
+    function Register(address requester, bytes4 callback, bytes18 index) public returns(uint64)
     {
         // [TODO] store eth value
         uint64 id = currentId;
         currentId++;
         requests[id].requester = requester;
         requests[id].callback = callback;
-        requests[id].uri = uri;
+        requests[id].index = index;
         requests[id].isDone = false;
         return id;
     }
@@ -45,7 +43,7 @@ contract ClaveChain
         requests[id].isDone = true;
     }
     
-    function Send(uint64 id, string uri, string data) public
+    function SendResult(uint64 id, bytes18 index, bytes32 name, bytes11 phone) public
     {
         // [TODO]send eth to ClaveChain wallet
         if(msg.sender != clave){
@@ -57,19 +55,17 @@ contract ClaveChain
             return;
         }
 
-        if(sha3(uri) != sha3(requests[id].uri))
+        if(index != requests[id].index)
         {
             return;    
         }
 
         address requester = requests[id].requester;
         bytes4 callback = requests[id].callback;
-        requester.call(callback, id, data);
-    }
-
-    function Kill() public
-    {
-        if (msg.sender == creator)
-            suicide(creator);
+        
+        // [TODO] deal with failing calls
+        requester.call(callback, id, index, name, phone);
+        
+        requests[id].isDone = true;
     }
 }
