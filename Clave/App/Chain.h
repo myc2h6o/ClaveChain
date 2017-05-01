@@ -14,7 +14,7 @@ enum T_CallContract {
 
 struct Request {
     unsigned long long id;
-    std::string uri;
+    std::string index;
     bool isDone;
 };
 

@@ -17,7 +17,7 @@ curl_slist *header = NULL;
 std::string curlRetData = "";
 
 unsigned long long Chain::currentId = 0;
-unsigned long long Chain::nonce = 1;
+unsigned long long Chain::nonce = 0;
 std::string Chain::address = "";
 
 void Chain::init(const std::string& _host, const std::string& _address) {
@@ -125,7 +125,7 @@ Request Chain::getRequest(const unsigned long long& id) {
     Request result;
     result.id = id;
     result.isDone = true;
-    result.uri = "";
+    result.index = "";
 
     // get request json
     char hexId[HEX_UINT64_SIZE + 1];
@@ -147,24 +147,26 @@ Request Chain::getRequest(const unsigned long long& id) {
         return result;
     }
 
-    // get isDone
-    pos += RESULT_OFFSET + HEX_PREFIX_OFFSET + HEX_UINT256_SIZE * 3 + HEX_BOOL_OFFSET;
-    if (curlRetData[pos] == '0') {
-        result.isDone = false;
+    // get index
+    pos += RESULT_OFFSET + HEX_PREFIX_OFFSET + HEX_UINT256_SIZE * 2;
+    int indexLength = HEX_UINT256_SIZE / 4;
+    int indexPosRight = curlRetData.find("00", pos);
+    if (indexPosRight > 0) {
+        indexLength = (indexPosRight - pos) / 2;
+        if (indexLength > HEX_UINT256_SIZE / 4) {
+            indexLength = HEX_UINT256_SIZE / 4;
+        }
+    }
+    std::string hexIndex = curlRetData.substr(pos, indexLength * 2);
+    result.index.resize(indexLength);
+    for (unsigned long long i = 0; i < indexLength; ++i) {
+        sscanf_s(hexIndex.substr(2 * i, 2).c_str(), "%x", &(result.index[i]));
     }
 
-    // get uri length
-    pos += HEX_BOOL_SIZE + HEX_UINT64_OFFSET;
-    std::string hexUriLength = curlRetData.substr(pos, HEX_UINT64_SIZE);
-    unsigned long long  uriLength = 0;
-    sscanf_s(hexUriLength.c_str(), "%llx", &uriLength);
-
-    // get uri
-    pos += HEX_UINT64_SIZE;
-    std::string hexUri = curlRetData.substr(pos, uriLength * 2);
-    result.uri.resize(uriLength);
-    for (unsigned long long i = 0; i < uriLength; ++i) {
-        sscanf_s(hexUri.substr(2 * i, 2).c_str(), "%x", &(result.uri[i]));
+    // get isDone
+    pos += HEX_UINT256_SIZE + HEX_BOOL_OFFSET;
+    if (curlRetData[pos] == '0') {
+        result.isDone = false;
     }
 
     return result;

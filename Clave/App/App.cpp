@@ -7,12 +7,8 @@
 
 #define MILLI_SECOND_WAIT_TIME 5000
 #define HOST "http://localhost:8545"
-#define ADDRESS "9126f3fc2b6a5c554ffda1d7ae231092ad74ffb0"
 
 int main() {
-    // Initialize chain
-    Chain::init(HOST, ADDRESS);
-
     // Initialize enclave
     Clave clave;
     if (clave.init() < 0) {
@@ -22,24 +18,27 @@ int main() {
     }
 
     clave.generateKeyPair();
-/*
+
     //Set middle contract address on blockchain
     std::string address;
     std::string confirmStr = "";
     while (confirmStr != "yes") {
-        std::cout << "Input middleman contract address:" << std::endl;
+        std::cout << "Input middleman contract address(without 0x and quote sign):" << std::endl;
         std::cin >> address;
         std::cout << "Is this the correct middleman contract address:" << std::endl << address << std::endl;
         std::cout << "(Input yes to confirm, other to reinput):";
         std::cin >> confirmStr;
         getchar();
     }
-*/
-    if (clave.setContractAddress(ADDRESS) < 0) {
+
+    if (clave.setContractAddress(address.c_str()) < 0) {
         std::cout << "Failed to set contract address\n";
         getchar();
         return -1;
     }
+
+    // Initialize chain
+    Chain::init(HOST, address);
 
     // Main loop
     std::cout << "Start main loop\n";
@@ -55,8 +54,9 @@ int main() {
         else {
             for (size_t i = 0; i < nRequests; ++i) {
                 // output requests
-                //std::cout << (requests[i].isDone ? "done   " : "undone ") << requests[i].uri << std::endl;
+                std::cout << (requests[i].isDone ? "done   " : "undone ") << requests[i].index << std::endl;
                 if (requests[i].isDone) {
+                    Chain::increaseId();
                     continue;
                 }
 

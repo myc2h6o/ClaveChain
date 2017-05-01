@@ -1,0 +1,39 @@
+Here coinbase is "0xb83e3a75f67420571b3d52ae26c64489376e4e37"
+
+start App
+unlock coinbase and start mining
+_clave = <Clave Address given from Enclave>
+Send money to Encalve address
+{
+    "jsonrpc": "2.0",
+    "method": "eth_sendTransaction",
+    "params": [{
+        "to": "<Enclave address>",
+        "from": "0xb83e3a75f67420571b3d52ae26c64489376e4e37",
+        "gasPrice": "0x1000",
+        "gas": "0x100000",
+        "value": "0x200000000000000000"
+    }],
+    "id": 1
+}
+
+deploy KycClaveChain
+set App middle man address to kycclavechain_sol_kycclavechain.address
+_kycClaveChain = kycclavechain_sol_kycclavechain.address
+deploy CustomerInfo
+
+
+send get outer customer request:
+{
+    "jsonrpc": "2.0",
+    "method": "eth_sendTransaction",
+    "params": [{
+        "to": "<Customer Info Address>",
+        "from": "0xb83e3a75f67420571b3d52ae26c64489376e4e37",
+        "gas": "0x300000",
+        "data": "0x0676aade6162636465000000000000000000000000000000000000000000000000000000"
+    }],
+    "id": 1
+}
+
+check: customerinfo_sol_customerinfo.customers("abcde")

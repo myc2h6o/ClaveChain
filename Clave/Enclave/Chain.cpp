@@ -32,24 +32,25 @@ void ecall_setContractAddress(const char *address) {
     convertHexToBytes(contractAddress);
 }
 
-void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long id, const char *uri, char *result) {
+void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long id, const char *index, char *result) {
     // get data
-    char *outerData = getDataFromUri(uri);
-    if (outerData == NULL) {
-        char noDataHint[] = "No outer data";
-        int hintLength = strlen(noDataHint);
-        outerData = (char*)malloc(hintLength + 1);
-        memcpy(outerData, "No outer data", hintLength + 1);
-    }
+    char name[UINT_256_BYTE_SIZE] = "StubName";
+    char phone[UINT_256_BYTE_SIZE] = "StubPhone";
 
     //get serialized transaction
     char *t_nonce = (char*)malloc(strlen(nonce) + 1);
-    memcpy(t_nonce, nonce, strlen(nonce) + 1);
-    char t_gasPrice[] = "";
-    char t_gasLimit[] = "100000";
+    if (strlen(nonce) == 1 && memcmp(nonce, "0", 1) == 0) {
+        // nonce is set to empty string if nonce is 0x0
+        t_nonce[0] = '\0';
+    }
+    else {
+        memcpy(t_nonce, nonce, strlen(nonce) + 1);
+    }
+    char t_gasPrice[] = "800000000";  // here is hex format, should be larger than 18shannon (18 * 10**9)
+    char t_gasLimit[] = "100000";     // here is hex format, should be large enough
     char t_value[] = "";
     char *t_data = NULL;
-    int t_dataLength = generateTransactionData(&t_data, id, uri, outerData);
+    int t_dataLength = generateTransactionData(&t_data, id, index, name, phone);
     RLPStringItem items[9];
     unsigned char *rlp = NULL;
     unsigned int rlpLength = 0;
@@ -84,7 +85,6 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long
     }
 
     // clean up
-    free(outerData);
     free(t_nonce);
     free(t_data);
     free(rlp);
@@ -112,49 +112,36 @@ void setUint64ToBytes(char *dst, unsigned long long u) {
     }
 }
 
-unsigned int generateTransactionData(char **dst, const unsigned long long& id, const char *uri, const char *data) {
-    unsigned int uriLength = strlen(uri);
-    unsigned int dataLength = strlen(data);
-    unsigned int uriPaddedLength = padTo32(uriLength);
-    unsigned int dataPaddedLength = padTo32(dataLength);
-    unsigned int length = FUNC_BYTE_CODE_SIZE + UINT_256_BYTE_SIZE * 5 + uriPaddedLength + dataPaddedLength;
+unsigned int generateTransactionData(char **dst, const unsigned long long& id, const char *index, const char *name, const char *phone) {
+    unsigned int indexLength = strlen(index);
+    unsigned int nameLength = strlen(name);
+    unsigned int phoneLength = strlen(phone);
+    unsigned int length = FUNC_BYTE_CODE_SIZE + UINT_256_BYTE_SIZE * 4;
 
     // init data to all '0'
     *dst = (char*)malloc(length);
     memset(*dst, 0, length);
     char *pos = *dst;
 
-    // byte code of function Send()
-    char funcByteCode[] = { (char)0x88, (char)0x13, (char)0xb4, (char)0x77 };
-    memcpy(pos, funcByteCode, 4);
+    // byte code of function SendResult()
+    char funcByteCode[] = { (char)0xe3, (char)0x85, (char)0xf7, (char)0xd2 };
+    memcpy(pos, funcByteCode, FUNC_BYTE_CODE_SIZE);
     pos += FUNC_BYTE_CODE_SIZE;
 
     // id
     setUint64ToBytes(pos + UINT_64_BYTE_OFFSET, id);
     pos += UINT_256_BYTE_SIZE;
 
-    // uri string position
-    setUint64ToBytes(pos + UINT_64_BYTE_OFFSET, UINT_256_BYTE_SIZE * 3);
+    // index
+    memcpy(pos, index, indexLength);
     pos += UINT_256_BYTE_SIZE;
 
-    // data string position
-    setUint64ToBytes(pos + UINT_64_BYTE_OFFSET, UINT_256_BYTE_SIZE * 4 + uriPaddedLength);
+    // name
+    memcpy(pos, name, nameLength);
     pos += UINT_256_BYTE_SIZE;
 
-    // uri string length
-    setUint64ToBytes(pos + UINT_64_BYTE_OFFSET, uriLength);
-    pos += UINT_256_BYTE_SIZE;
-
-    // uri string
-    memcpy(pos, uri, uriLength);
-    pos += uriPaddedLength;
-
-    // data string length
-    setUint64ToBytes(pos + UINT_64_BYTE_OFFSET, dataLength);
-    pos += UINT_256_BYTE_SIZE;
-
-    // data string
-    memcpy(pos, data, dataLength);
+    // phone
+    memcpy(pos, phone, phoneLength);
 
     return length;
 }
