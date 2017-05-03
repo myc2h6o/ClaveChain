@@ -76,7 +76,7 @@ static int my_send(void *ctx, const unsigned char *buf, size_t len) {
     return ret;
 }
 
-void clinet_context_init(char *serverName, char *serverPort) {
+void clinet_context_init(const char *serverName, const char *serverPort) {
     client_opt_init(&opt);
     opt.server_name = serverName;
     opt.server_port = serverPort;
@@ -194,33 +194,41 @@ void client_context_destroy() {
     mbedtls_ctr_drbg_free(&s_ctr_drbg);
 }
 
-int getContentLengthFromHeader(const char *header) {
-    char contentLengthStr[] = "Content-Length: ";
-    int contentLengthStrLength = strlen(contentLengthStr);
-    size_t headerLength = strlen(header);
-    for (size_t i = 0; i < headerLength; ++i) {
-        if (header[i] == 'C' && strncmp(header + i, contentLengthStr, contentLengthStrLength) == 0) {
-            const char *posl = header + i + contentLengthStrLength;
-            const char *posr = posl;
-            while (*posr != '\r') {
-                posr++;
-                if (*posr == '\0') {
-                    return -1;
-                }
-            }
-            int length = posr - posl;
-            char *resultStr = (char*)malloc(length + 1);
-            strncpy(resultStr, posl, length);
-            int result = atoi(resultStr);
-            free(resultStr);
-            return result;
+int findSubString(const char *from, const char *target) {
+    char firstCh = target[0];
+    int fromLength = strlen(from);
+    int targetLength = strlen(target);
+    for (size_t i = 0; i < fromLength; ++i) {
+        if (from[i] == firstCh && strncmp(from + i, target, targetLength) == 0) {
+            return i;
         }
     }
     return -1;
 }
 
-int ssl_client(unsigned char* output, int length) {
+int getContentLengthFromHeader(const char *header) {
+    char contentLengthStr[] = "Content-Length: ";
+    int pos = findSubString(header, contentLengthStr);
+    const char *posl = header + pos + strlen(contentLengthStr);
+    const char *posr = posl;
+    while (*posr != '\r') {
+        posr++;
+        if (*posr == '\0') {
+            return -1;
+        }
+    }
+    int length = posr - posl;
+    char *resultStr = (char*)malloc(length + 1);
+    strncpy(resultStr, posl, length);
+    int result = atoi(resultStr);
+    free(resultStr);
+    return result;
+}
+
+int ssl_client(const char *page, unsigned char* output, int length) {
     int ret = 0;
+
+    opt.request_page = page;
 
     // Start the connection
     if ((ret = mbedtls_net_connect(&server_fd, opt.server_name, opt.server_port, MBEDTLS_NET_PROTO_TCP)) != 0) {
@@ -306,6 +314,8 @@ int ssl_client(unsigned char* output, int length) {
     bool isReadingBody = false;
     int currentLength = 0;
     int resultLength = 0;
+    unsigned char *originOutput = output;
+    int originLength = length;
     while (1) {
         // get data chunk
         len = mbedtls_ssl_read(&ssl, output, length - 1);
@@ -328,21 +338,42 @@ int ssl_client(unsigned char* output, int length) {
         }
         output[len] = '\0';
 
-        if (isReadingBody){
+        if (!isReadingBody) {
+            // get Content-Length from header
+            int pos = findSubString((char*)output, "\r\n\r\n");
+            if (pos > 0) {
+                isReadingBody = true;
+                resultLength = getContentLengthFromHeader((char*)output);
+                if (resultLength < 0) {
+                    oprintf("s_client:ssl_client(): fail! cannot get Content-Length from header\n");
+                    return 0;
+                }
+                if (pos + 4 < len) {
+                    memmove(originOutput, output + pos + 4, len - pos - 3);  // bring in the '\0'
+                    output = originOutput + len - pos - 4;
+                    currentLength = len - pos - 4;
+                    if (currentLength == resultLength) {
+                        return resultLength;
+                    }
+                }
+                else {
+                    currentLength = 0;
+                    length = originLength;
+                    output = originOutput;
+                }
+            }
+            else {
+                currentLength += len;
+                length -= len;
+                output += len;
+            }
+        }
+        else{
             currentLength += len;
             length -= len;
             output += len;
             if (currentLength == resultLength) {
                 return resultLength;
-            }
-        }
-        else {
-            isReadingBody = true;
-            // get Content-Length from header
-            resultLength = getContentLengthFromHeader((char*)output);
-            if (resultLength < 0) {
-                oprintf("s_client:ssl_client(): fail! cannot get Content-Length from header\n");
-                return 0;
             }
         }
     }

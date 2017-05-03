@@ -17,15 +17,7 @@ void ecall_initOuterDataServer(const char *name, const char *port) {
     serverPort = (char*)malloc(portLength);
     memcpy(serverPort, port, portLength);
     serverPort[portLength] = '\0';
-
     clinet_context_init(serverName, serverPort);
-
-    // [TODO] remove this
-    // test
-    char test_name[OUTER_DATA_NAME_SIZE + 1];
-    char test_phone[OUTER_DATA_PHONE_SIZE + 1];
-    getCustomerInfo("abcde", test_name, test_phone);
-    oprintf("Testing outer data: %s %s\n", test_name, test_phone);
 }
 
 void ecall_destroyOuterDataServer() {
@@ -35,20 +27,56 @@ void ecall_destroyOuterDataServer() {
 }
 
 void getCustomerInfo(const char *index, char name[OUTER_DATA_NAME_SIZE + 1], char phone[OUTER_DATA_PHONE_SIZE + 1]) {
-    const int bufSize = 5120;
+    // prepare buffer and request page
+    const int bufSize = 1024;
     unsigned char buf[bufSize];
-    int outputLength = ssl_client(buf, bufSize);
-    oprintf("%d\n", outputLength);
-    for (int t = 0; t < outputLength; ++t) {
-        oprintf("%c", ((char*)buf)[t]);
-    }
-    oprintf("\n\n\n\n\nreplay\n\n\n\n\n");
-    outputLength = ssl_client(buf, 8192);
-    oprintf("%d\n", outputLength);
-    for (int t = 0; t < outputLength; ++t) {
-        oprintf("%c", ((char*)buf)[t]);
+    char *requestPage = (char*)malloc(strlen(index) + 2);
+    requestPage[0] = '/';
+    memcpy(requestPage + 1, index, strlen(index) + 1);
+
+    // get data from server
+    int outputLength = ssl_client(requestPage, buf, bufSize);
+    if (outputLength <= 0) {
+        name[0] = '\0';
+        phone[0] = '\0';
+        return;
     }
 
-    memcpy(name, "StubName", 9);
-    memcpy(phone, "StubPhone", 10);
+    //clean request page
+    free(requestPage);
+
+    // parse return data
+    // name
+    int length = strlen((char*)buf);
+    int pos = 1;
+    for (; pos < length; ++pos) {
+        if (buf[pos] == '\n') {
+            break;
+        }
+    }
+    if (pos == length) {
+        oprintf("OuterData:getCustomerInfo(): Error, data returned by server is withinvalid format\n");
+    }
+    if (pos > OUTER_DATA_NAME_SIZE) {
+        oprintf("OuterData:getCustomerInfo(): Error, name returned by server too long\n");
+    }
+    memcpy(name, buf, pos);
+    name[pos] = '\0';
+
+    // phone
+    pos++;
+    int pos2 = pos + 1;
+    for (; pos2 < length; ++pos2) {
+        if (buf[pos2] == '\n') {
+            break;
+        }
+    }
+    if (pos2 == length) {
+        oprintf("OuterData:getCustomerInfo(): Error, data returned by server is withinvalid format\n");
+    }
+    if (pos2 - pos > OUTER_DATA_PHONE_SIZE) {
+        oprintf("OuterData:getCustomerInfo(): Error, phone returned by server too long\n");
+    }
+    memcpy(phone, buf + pos, pos2 - pos);
+    phone[pos2 - pos] = '\0';
 }

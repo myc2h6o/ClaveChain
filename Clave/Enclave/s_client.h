@@ -67,13 +67,13 @@
 
 typedef struct options
 {
-    char *server_name;    /* hostname of the server (client only)     */
-    char *server_port;    /* port on which the ssl service runs       */
+    const char *server_name;    /* hostname of the server (client only)     */
+    const char *server_port;    /* port on which the ssl service runs       */
     int debug_level;            /* level of debugging                       */
     int nbio;                   /* should I/O be blocking?                  */
     uint32_t read_timeout;      /* timeout on mbedtls_ssl_read() in milliseconds    */
     int max_resend;             /* DTLS times to resend on read timeout     */
-    char *request_page;   /* page on server to request                */
+    const char *request_page;   /* page on server to request                */
     int request_size;           /* pad request with header to requested size */
     const char *ca_file;        /* the file with the CA certificate(s)      */
     const char *ca_path;        /* the path with the CA certificate(s) reside */
@@ -115,9 +115,9 @@ void client_opt_init(client_opt_t* opt);
 extern "C" {
 #endif
 
-    void clinet_context_init(char *serverName, char *serverPort);
+    void clinet_context_init(const char *serverName, const char *serverPort);
     void client_context_destroy();
-    int ssl_client(unsigned char* buf, int len);
+    int ssl_client(const char *page, unsigned char* output, int length);
 
 #if defined(__cplusplus)
 }
