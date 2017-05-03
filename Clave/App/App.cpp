@@ -7,8 +7,8 @@
 
 #define MILLI_SECOND_WAIT_TIME 5000
 #define GETH_ADDRESS "http://localhost:8545"
-#define OUTER_SERVER_NAME "www.ele.me"
-#define OUTER_SERVER_PORT "443"
+#define OUTER_SERVER_NAME "localhost"
+#define OUTER_SERVER_PORT "4433"
 
 int main() {
     // Initialize enclave
