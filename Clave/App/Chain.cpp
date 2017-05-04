@@ -161,7 +161,7 @@ Request Chain::getRequest(const unsigned long long& id) {
     std::string hexIndex = curlRetData.substr(pos, indexLength * 2);
     result.index.resize(indexLength);
     for (unsigned long long i = 0; i < indexLength; ++i) {
-        sscanf(hexIndex.substr(2 * i, 2).c_str(), "%x", &(result.index[i]));
+        sscanf(hexIndex.substr(2 * i, 2).c_str(), "%x", (unsigned int*)&(result.index[i]));
     }
 
     // get isDone

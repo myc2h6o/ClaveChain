@@ -4,6 +4,11 @@
 #include "Chain.h"
 #include "Clave.h"
 
+#ifdef _WIN32
+#else
+#include "unistd.h"
+#endif
+
 #define MILLI_SECOND_WAIT_TIME 5000
 #define GETH_ADDRESS "http://localhost:8545"
 #define OUTER_SERVER_NAME "localhost"
@@ -60,7 +65,7 @@ int main() {
 #ifdef _WIN32
             Sleep(MILLI_SECOND_WAIT_TIME);
 #else
-
+            sleep(MILLI_SECOND_WAIT_TIME / 1000);
 #endif
         }
         else {
