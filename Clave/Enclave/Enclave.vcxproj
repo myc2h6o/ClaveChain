@@ -56,7 +56,6 @@
     <ClCompile Include="Enclave.cpp" />
     <ClCompile Include="Enclave_t.c" />
     <ClCompile Include="Keccak.cpp" />
-    <ClCompile Include="mbedTlsSgxSignV.cpp" />
     <ClCompile Include="OuterData.cpp" />
     <ClCompile Include="Output.cpp" />
     <ClCompile Include="RLP.cpp" />
@@ -69,7 +68,6 @@
     <ClInclude Include="Enclave.h" />
     <ClInclude Include="Enclave_t.h" />
     <ClInclude Include="Keccak.h" />
-    <ClInclude Include="mbedTlsSgxSignV.h" />
     <ClInclude Include="OuterData.h" />
     <ClInclude Include="Output.h" />
     <ClInclude Include="RLP.h" />

@@ -39,9 +39,6 @@
     <ClCompile Include="RLP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mbedTlsSgxSignV.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="s_client.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -69,9 +66,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RLP.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mbedTlsSgxSignV.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="s_client.h">
