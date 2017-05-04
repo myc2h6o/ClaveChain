@@ -11,6 +11,6 @@
 - Windows
     * Set build configuration to Simulation x86
     * Set App as starting project
-    * Configure setting of App: Debug->Working Directory as ..\Simulation (the enclave lib is under this folder)
+    * Configure setting of App: Debug->Working Directory as $(ProjectDir)..\Simulation (the enclave dll is under this folder)
 - Linux
 -     make SGX_MODE=SIM
