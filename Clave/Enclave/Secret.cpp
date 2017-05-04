@@ -7,6 +7,7 @@
 #include "mbedtls/ctr_drbg.h"
 #include "mbedtls/ecdsa.h"
 #include "mbedtls/entropy.h"
+#include "mbedTlsSgxSignV.h"
 
 /*
  * Use MBEDTLS_ECP_DP_SECP256K1, private key size is 32 bytes, public key size is 65 bytes (with 0x04 as first byte)
@@ -128,7 +129,7 @@ int sign(const char *message, const size_t& messageSize, char **sigr, char **sig
 
     int ret = 1;
     while (ret != 0) {
-        ret = mbedtls_ecdsa_sign_with_v(&ecdsaContext.grp, &r, &s, &v, &ecdsaContext.d, (unsigned char*)hash, hashSize, mbedtls_ctr_drbg_random, &ctr_drbg);
+        ret = win32_mbedtls_ecdsa_sign_with_v(&ecdsaContext.grp, &r, &s, &v, &ecdsaContext.d, (unsigned char*)hash, hashSize, mbedtls_ctr_drbg_random, &ctr_drbg);
         *sigv = v;
         unsigned char sigBytes[SIGNATURE_BYTE_SIZE];
         mbedtls_mpi_write_binary(&r, sigBytes, SIGNATURE_BYTE_SIZE);
