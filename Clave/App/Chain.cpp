@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -117,7 +118,7 @@ unsigned long long Chain::getRemoteId() {
     unsigned long long remoteId = 0;
     pos += RESULT_OFFSET + HEX_PREFIX_OFFSET + HEX_UINT64_OFFSET;
     std::string id = curlRetData.substr(pos, HEX_UINT64_SIZE);
-    sscanf_s(id.c_str(), "%llx", &remoteId);
+    sscanf(id.c_str(), "%llx", &remoteId);
     return remoteId;
 }
 
@@ -129,7 +130,7 @@ Request Chain::getRequest(const unsigned long long& id) {
 
     // get request json
     char hexId[HEX_UINT64_SIZE + 1];
-    sprintf_s(hexId, "%016llx", id);
+    sprintf(hexId, "%016llx", id);
 
     std::string json = "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x";
     json += address;
@@ -160,7 +161,7 @@ Request Chain::getRequest(const unsigned long long& id) {
     std::string hexIndex = curlRetData.substr(pos, indexLength * 2);
     result.index.resize(indexLength);
     for (unsigned long long i = 0; i < indexLength; ++i) {
-        sscanf_s(hexIndex.substr(2 * i, 2).c_str(), "%x", &(result.index[i]));
+        sscanf(hexIndex.substr(2 * i, 2).c_str(), "%x", &(result.index[i]));
     }
 
     // get isDone
@@ -187,7 +188,7 @@ size_t Chain::WriteMemoryCallback(char *src, size_t size, size_t nmemb, std::str
 
 std::string Chain::getHexNonce() {
     char buf[HEX_UINT64_SIZE];
-    sprintf_s(buf, "%llx", nonce);
+    sprintf(buf, "%llx", nonce);
     std::string result = std::string(buf);
     return result;
 }

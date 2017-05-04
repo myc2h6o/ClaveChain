@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <time.h>
 #include "Chain.h"
 #include "Clave.h"
 
@@ -58,7 +57,11 @@ int main() {
         nRequests = requests.size();
         std::cout << "Got " << nRequests << " request(s)" << std::endl;
         if (nRequests == 0) {
+#ifdef _WIN32
             Sleep(MILLI_SECOND_WAIT_TIME);
+#else
+
+#endif
         }
         else {
             for (size_t i = 0; i < nRequests; ++i) {
