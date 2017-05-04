@@ -4,7 +4,7 @@
 // see http://create.stephan-brumme.com/disclaimer.html
 //
 #include <stdlib.h>
-#include "keccak.h"
+#include "Keccak.h"
 // big endian architectures need #define __BYTE_ORDER __BIG_ENDIAN
 #ifndef _MSC_VER
 #include <endian.h>

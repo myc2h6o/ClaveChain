@@ -1,5 +1,5 @@
 //max supported length is 2**32-1(uint32 max) in this implementation
-#include "rlp.h"
+#include "RLP.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
