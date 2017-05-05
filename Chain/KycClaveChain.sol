@@ -57,7 +57,7 @@ contract KycClaveChain
 
         if(index != requests[id].index)
         {
-            return;    
+            return;
         }
 
         address requester = requests[id].requester;

@@ -24,7 +24,7 @@ contract CustomerInfo is IKycClaveChain
     
     function GetOtherCustomerInfo(bytes18 index) public
     {
-       reqid = kycClaveChain.Register(this, callback, index);
+        reqid = kycClaveChain.Register(this, callback, index);
     }
     
     function SetCustomerInfo(uint64 requestId, bytes18 index, bytes32 name, bytes11 phone) public
