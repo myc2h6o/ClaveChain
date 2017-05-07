@@ -15,7 +15,7 @@ function search() {
             }
         },
         error: function () {
-            setReusult('Cannot reach server');
+            setResult('Cannot reach server');
         }
     });
 
