@@ -1,0 +1,1 @@
+geth --datadir "./" --cache=512 --rpc --rpccorsdomain "*"
