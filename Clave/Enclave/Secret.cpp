@@ -151,7 +151,6 @@ int sign(const char *message, const size_t& messageSize, char **sigr, char **sig
     return ret;
 }
 
-#include "s_client.h"
 void ecall_generateKeyPair() {
     int ret;
     const char *pers = "ecdsa";

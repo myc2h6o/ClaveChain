@@ -21,9 +21,6 @@
     <ClCompile Include="Enclave_t.c">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="Enclave.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Output.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -52,9 +49,6 @@
   <ItemGroup>
     <ClInclude Include="Enclave_t.h">
       <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Enclave.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Output.h">
       <Filter>Header Files</Filter>
