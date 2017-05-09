@@ -82,8 +82,13 @@ int main() {
                 while (1) {
                     signedTransaction = clave.getSignedTransactionFromRequest(Chain::getHexNonce(), requests[i]);
                     if (signedTransaction.empty()) {
-                        // data or uri too large
-                        Chain::increaseId();
+                        // cannot connect to outer data server
+                        std::cout << "Cannot connect to outer data server" << std::endl;
+#ifdef _WIN32
+                        Sleep(MILLI_SECOND_WAIT_TIME);
+#else
+                        sleep(MILLI_SECOND_WAIT_TIME / 1000);
+#endif
                         break;
                     }
                     T_CallContract ret = Chain::callContract(signedTransaction);

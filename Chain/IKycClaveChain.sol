@@ -4,7 +4,7 @@ contract IKycClaveChain
 {
     IKycClaveChain public kycClaveChain;
     address creator;
-    function Register(address requester, bytes4 callback, bytes18 index) public returns(uint64)
+    function Register(address requester, bytes4 callback, bytes18 index) payable public returns(uint64)
     {
         return 0;
     }

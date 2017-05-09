@@ -37,6 +37,10 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long
     char name[OUTER_DATA_NAME_SIZE + 1] = "";
     char phone[OUTER_DATA_PHONE_SIZE + 1] = "";
     getCustomerInfo(index, name, phone);
+    if (strcmp("", name) == 0) {
+        result[0] = '\0';
+        return;
+    }
 
     //get serialized transaction
     char *t_nonce = (char*)malloc(strlen(nonce) + 1);
@@ -48,7 +52,7 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long
         memcpy(t_nonce, nonce, strlen(nonce) + 1);
     }
     char t_gasPrice[] = "800000000";  // here is hex format, should be larger than 18shannon (18 * 10**9)
-    char t_gasLimit[] = "100000";     // here is hex format, should be large enough
+    char t_gasLimit[] = "20000";     // here is hex format, should be large enough
     char t_value[] = "";
     char *t_data = NULL;
     int t_dataLength = generateTransactionData(&t_data, id, index, name, phone);

@@ -22,13 +22,16 @@ contract CustomerInfo is IKycClaveChain
         reqid = 0;
     }
     
-    function GetOtherCustomerInfo(bytes18 index) public
+    function GetOtherCustomerInfo(bytes18 index) payable public
     {
-        reqid = kycClaveChain.Register(this, callback, index);
+        reqid = kycClaveChain.Register.value(msg.value)(this, callback, index);
     }
     
     function SetCustomerInfo(uint64 requestId, bytes18 index, bytes32 name, bytes11 phone) public
     {
+        if(requestId != reqid) {
+            throw;
+        }
         if(msg.sender == address(kycClaveChain))
         {
             customers[index].name = name;
