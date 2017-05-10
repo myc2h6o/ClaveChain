@@ -8,9 +8,7 @@ sgx_time_source_nonce_t newSgxTimeSourceNonce;
 
 int sgxCurrentTime(sgx_time_t *now)
 {
-    sgx_time_t sgxNow;
-
-    if (sgx_get_trusted_time(&sgxNow, &newSgxTimeSourceNonce) != SGX_SUCCESS) {
+    if (sgx_get_trusted_time(now, &newSgxTimeSourceNonce) != SGX_SUCCESS) {
         return -1;
     }
 
