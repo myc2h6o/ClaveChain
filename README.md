@@ -1,11 +1,13 @@
 # ClaveChain
 
 Blockchain retrieving trusted outer source data through intel SGX.
- - Blockchain is using Ethereum and retrieving outer source data based on TLS.
- - Use [Intel SGX](https://software.intel.com/en-us/sgx) as trusted middle man.
- - Use [curl](https://curl.haxx.se/) for http request to call blockchain.
- - Use [mbedTLS for SGX ported by fanz](https://github.com/bl4ck5un/mbedtls-SGX) for TLS and ecdsa stuff.
- - Use keccak sha3 hash implementation [here](http://create.stephan-brumme.com/hash-library/#keccak).
+
+## Introduction
+- Blockchain is using Ethereum and retrieving outer source data based on TLS.
+- Use [Intel SGX](https://software.intel.com/en-us/sgx) as trusted middle man.
+- Use [curl](https://curl.haxx.se/) for http request to call blockchain.
+- Use [mbedTLS for SGX ported by fanz](https://github.com/bl4ck5un/mbedtls-SGX) for TLS and ecdsa stuff.
+- Use keccak sha3 hash implementation [here](http://create.stephan-brumme.com/hash-library/#keccak).
 
 ## Source code structure
 - `Chain`: Ethereum smart contracts
@@ -16,4 +18,4 @@ Blockchain retrieving trusted outer source data through intel SGX.
 - `Tools`: Helping tools
 
 ## Related work
- - [Town Crier: An Authenticated Data Feed for Smart Contracts](http://eprint.iacr.org/2016/168.pdf)
+- [Town Crier: An Authenticated Data Feed for Smart Contracts](http://eprint.iacr.org/2016/168.pdf)
