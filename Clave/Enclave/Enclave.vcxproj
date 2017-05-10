@@ -45,6 +45,7 @@
       </EntryPointSymbol>
       <NoEntryPoint>true</NoEntryPoint>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>"$(SGXSDKInstallPath)bin\win32\release\sgx_sign.exe" sign -key "$(ProjectDir)Enclave_private.pem" -enclave "$(OutDir)Enclave.dll" -out "$(OutDir)Enclave.signed.dll" -config "$(ProjectDir)Enclave.config.xml"</Command>
@@ -55,7 +56,9 @@
     <ClCompile Include="Chain.cpp" />
     <ClCompile Include="Enclave_t.c" />
     <ClCompile Include="Keccak.cpp" />
+    <ClCompile Include="mbedCertTime.cpp" />
     <ClCompile Include="mbedTlsSgxSignV.cpp" />
+    <ClCompile Include="mbedMktime.cpp" />
     <ClCompile Include="OuterData.cpp" />
     <ClCompile Include="Output.cpp" />
     <ClCompile Include="RLP.cpp" />
@@ -68,6 +71,7 @@
     <ClInclude Include="Enclave_t.h" />
     <ClInclude Include="Keccak.h" />
     <ClInclude Include="mbedTlsSgxSignV.h" />
+    <ClInclude Include="mbedMktime.h" />
     <ClInclude Include="OuterData.h" />
     <ClInclude Include="Output.h" />
     <ClInclude Include="RLP.h" />

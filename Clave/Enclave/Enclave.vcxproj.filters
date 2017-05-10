@@ -45,6 +45,12 @@
     <ClCompile Include="mbedTlsSgxSignV.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="mbedCertTime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mbedMktime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enclave_t.h">
@@ -75,6 +81,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mbedTlsSgxSignV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mbedMktime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

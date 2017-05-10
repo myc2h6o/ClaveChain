@@ -1,5 +1,5 @@
 enclave {
-    from "sgx_tstdc.edl" import *;
+    from "sgx_tae_service.edl" import *;
     from "Chain.edl" import *;
     from "OuterData.edl" import *;
     from "Output.edl" import *;

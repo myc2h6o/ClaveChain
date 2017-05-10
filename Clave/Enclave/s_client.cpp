@@ -34,6 +34,7 @@
 #include "mbedtls/platform.h"
 #include "mbedtls/ssl.h"
 #include "mbedtls/x509.h"
+#include "sgx_tae_service.h"
 
 client_opt_t opt;
 
@@ -77,6 +78,16 @@ static int my_send(void *ctx, const unsigned char *buf, size_t len) {
 }
 
 void clinet_context_init(const char *serverName, const char *serverPort) {
+    // sgx time service
+    extern sgx_time_source_nonce_t sgxTimeSourceNonce;
+    sgx_create_pse_session();
+    sgx_time_t sgxNow;
+    if (sgx_get_trusted_time(&sgxNow, &sgxTimeSourceNonce) != SGX_SUCCESS) {
+        oprintf("s_client:client_context_init() : fail! Cannot init sgx time\n");
+        return;
+    }
+
+    // mbedtls context
     client_opt_init(&opt);
     opt.server_name = serverName;
     opt.server_port = serverPort;
@@ -183,6 +194,10 @@ void clinet_context_init(const char *serverName, const char *serverPort) {
 }
 
 void client_context_destroy() {
+    // sgx time service
+    sgx_close_pse_session();
+
+    // mbedtls context
     mbedtls_net_free(&server_fd);
     mbedtls_ssl_free(&ssl);
     mbedtls_ssl_config_free(&conf);

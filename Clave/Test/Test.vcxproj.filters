@@ -29,5 +29,8 @@
     <ClCompile Include="testRLP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="testMbedMktime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
