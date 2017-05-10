@@ -84,4 +84,5 @@ sgx_time_t mbedMktime(const mbedtls_x509_time *t) {
     result += t->hour * 3600;
     result += t->min * 60;
     result += t->sec;
+    return result;
 }
