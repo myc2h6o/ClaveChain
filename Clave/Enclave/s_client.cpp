@@ -196,8 +196,8 @@ void client_context_destroy() {
 
 int findSubString(const char *from, const char *target) {
     char firstCh = target[0];
-    int fromLength = strlen(from);
-    int targetLength = strlen(target);
+    size_t fromLength = strlen(from);
+    size_t targetLength = strlen(target);
     for (size_t i = 0; i < fromLength; ++i) {
         if (from[i] == firstCh && strncmp(from + i, target, targetLength) == 0) {
             return i;
