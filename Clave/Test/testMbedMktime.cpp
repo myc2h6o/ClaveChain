@@ -68,8 +68,23 @@ public:
     TEST_METHOD(MaxSecond) {
         testTime(2017, 8, 20, 12, 0, 59);
     }
-    TEST_METHOD(LeapYear) {
-        testTime(2016, 2, 28, 12, 12, 12);
+    TEST_METHOD(LeapYearBeforeFeb) {
+        testTime(2016, 1, 20, 12, 12, 12);
+    }
+    TEST_METHOD(LeapYearFeb) {
+        testTime(2016, 2, 29, 12, 12, 12);
+    }
+    TEST_METHOD(LeapYearAfterFeb) {
+        testTime(2016, 3, 2, 12, 12, 12);
+    }
+    TEST_METHOD(NonLeapYearBeforeFeb) {
+        testTime(2015, 1, 10, 12, 12, 12);
+    }
+    TEST_METHOD(NonLeapYearFeb) {
+        testTime(2015, 2, 28, 12, 12, 12);
+    }
+    TEST_METHOD(NonLeapYearAfterFeb) {
+        testTime(2015, 3, 4, 12, 12, 12);
     }
 
 private:
