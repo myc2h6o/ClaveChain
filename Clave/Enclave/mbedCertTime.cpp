@@ -3,9 +3,6 @@
 #include "sgx_tae_service.h"
 #include "mbedtls/x509.h"
 
-#define TIME_ZONE 8
-#define SEC_OFFSET (TIME_ZONE * 3600)
-
 sgx_time_source_nonce_t sgxTimeSourceNonce;
 sgx_time_source_nonce_t newSgxTimeSourceNonce;
 
@@ -20,7 +17,6 @@ int sgxCurrentTime(sgx_time_t *now)
         return -1;
     }
 
-    *now -= SEC_OFFSET;
     return 0;
 }
 
