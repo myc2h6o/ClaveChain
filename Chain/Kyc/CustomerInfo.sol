@@ -1,6 +1,6 @@
 pragma solidity ^0.4.0;
 
-import "github.com/mycspring/ClaveChain/Chain/IKycClaveChain.sol";
+import "github.com/mycspring/ClaveChain/Chain/Kyc/IKycClaveChain.sol";
 
 contract CustomerInfo is IKycClaveChain
 {
