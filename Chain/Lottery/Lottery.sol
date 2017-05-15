@@ -15,7 +15,7 @@ contract Lottery is ILotteryClaveChain
     uint256 constant REWARD = 0x100000;
     address clave;
     mapping(uint256 => Record) public records;
-    uint64 lotteryNumber = 0;
+    uint64 public lotteryNumber = 0;
     uint256 currentId = 0;
     bool public gotNumber = false;
     bool public isPaid = false;
