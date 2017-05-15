@@ -26,20 +26,18 @@ void ecall_destroyOuterDataServer() {
     client_context_destroy();
 }
 
-void getCustomerInfo(const char *index, char name[OUTER_DATA_NAME_SIZE + 1], char phone[OUTER_DATA_PHONE_SIZE + 1]) {
+int getLotteryNumber() {
     // prepare buffer and request page
     const int bufSize = 1024;
     unsigned char buf[bufSize];
-    char *requestPage = (char*)malloc(strlen(index) + 2);
+    char *requestPage = (char*)malloc(2);
     requestPage[0] = '/';
-    memcpy(requestPage + 1, index, strlen(index) + 1);
+    requestPage[1] = '\0';
 
     // get data from server
     int outputLength = ssl_client(requestPage, buf, bufSize);
     if (outputLength <= 0) {
-        name[0] = '\0';
-        phone[0] = '\0';
-        return;
+        return -1;
     }
 
     //clean request page
@@ -51,32 +49,12 @@ void getCustomerInfo(const char *index, char name[OUTER_DATA_NAME_SIZE + 1], cha
     int pos = 1;
     for (; pos < length; ++pos) {
         if (buf[pos] == '\n') {
+            buf[pos] = '\0';
             break;
         }
     }
     if (pos == length) {
-        oprintf("OuterData:getCustomerInfo(): Error, data returned by server is withinvalid format\n");
+        oprintf("OuterData:getLotteryNumber(): Error, data returned by server is withinvalid format\n");
     }
-    if (pos > OUTER_DATA_NAME_SIZE) {
-        oprintf("OuterData:getCustomerInfo(): Error, name returned by server too long\n");
-    }
-    memcpy(name, buf, pos);
-    name[pos] = '\0';
-
-    // phone
-    pos++;
-    int pos2 = pos + 1;
-    for (; pos2 < length; ++pos2) {
-        if (buf[pos2] == '\n') {
-            break;
-        }
-    }
-    if (pos2 == length) {
-        oprintf("OuterData:getCustomerInfo(): Error, data returned by server is withinvalid format\n");
-    }
-    if (pos2 - pos > OUTER_DATA_PHONE_SIZE) {
-        oprintf("OuterData:getCustomerInfo(): Error, phone returned by server too long\n");
-    }
-    memcpy(phone, buf + pos, pos2 - pos);
-    phone[pos2 - pos] = '\0';
+    return atoi((char*)buf);
 }

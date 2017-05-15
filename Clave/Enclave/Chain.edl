@@ -1,7 +1,7 @@
 enclave {
     trusted {
         public void ecall_setContractAddress([in, string] const char *address);
-        public void ecall_getSignedTransactionFromRequest([in, string] const char *nonce, unsigned long long id, [in, string] const char *index, [out, size=2049] char *result);
+        public void ecall_getSignedTransactionFromRequest([in, string] const char *nonce, unsigned long long id, [out, size=2049] char *result);
     };
 
     untrusted {

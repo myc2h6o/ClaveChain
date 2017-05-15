@@ -71,7 +71,7 @@ int main() {
         else {
             for (size_t i = 0; i < nRequests; ++i) {
                 // output requests
-                std::cout << (requests[i].isDone ? "done   " : "undone ") << requests[i].index << std::endl;
+                std::cout << (requests[i].isDone ? "done   " : "undone ") << requests[i].id << std::endl;
                 if (requests[i].isDone) {
                     Chain::increaseId();
                     continue;

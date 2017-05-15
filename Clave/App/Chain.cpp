@@ -126,7 +126,6 @@ Request Chain::getRequest(const unsigned long long& id) {
     Request result;
     result.id = id;
     result.isDone = true;
-    result.index = "";
 
     // get request json
     char hexId[HEX_UINT64_SIZE + 1];
@@ -148,24 +147,8 @@ Request Chain::getRequest(const unsigned long long& id) {
         return result;
     }
 
-    // get index
-    pos += RESULT_OFFSET + HEX_PREFIX_OFFSET + HEX_UINT256_SIZE * 2;
-    int indexLength = HEX_UINT256_SIZE / 4;
-    int indexPosRight = curlRetData.find("00", pos);
-    if (indexPosRight > 0) {
-        indexLength = (indexPosRight - pos) / 2;
-        if (indexLength > HEX_UINT256_SIZE / 4) {
-            indexLength = HEX_UINT256_SIZE / 4;
-        }
-    }
-    std::string hexIndex = curlRetData.substr(pos, indexLength * 2);
-    result.index.resize(indexLength);
-    for (unsigned long long i = 0; i < indexLength; ++i) {
-        sscanf(hexIndex.substr(2 * i, 2).c_str(), "%x", (unsigned int*)&(result.index[i]));
-    }
-
     // get isDone
-    pos += HEX_UINT256_SIZE + HEX_BOOL_OFFSET;
+    pos += RESULT_OFFSET + HEX_PREFIX_OFFSET + HEX_UINT256_SIZE * 2 + HEX_BOOL_OFFSET;
     if (curlRetData[pos] == '0') {
         result.isDone = false;
     }

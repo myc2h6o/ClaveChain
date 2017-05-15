@@ -5,9 +5,9 @@ var app = express()
 
 const port = 4433;
 
-app.get('/:index', function(req, res) {
+app.get('/', function(req, res) {
     var index = req.params.index;
-    var result = index + "Name\n" + index + "Phone\n";
+    var result = "777\n";
     res.send(result);
 })
 

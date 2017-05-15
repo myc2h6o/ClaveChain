@@ -32,12 +32,11 @@ void ecall_setContractAddress(const char *address) {
     convertHexToBytes(contractAddress);
 }
 
-void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long id, const char *index, char *result) {
+void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long id, char *result) {
     // get data from tusted outer source
-    char name[OUTER_DATA_NAME_SIZE + 1] = "";
-    char phone[OUTER_DATA_PHONE_SIZE + 1] = "";
-    getCustomerInfo(index, name, phone);
-    if (strcmp("", name) == 0) {
+
+    int lotteryNumber = getLotteryNumber();
+    if (lotteryNumber == -1) {
         result[0] = '\0';
         return;
     }
@@ -55,7 +54,7 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long
     char t_gasLimit[] = "20000";     // here is hex format, should be large enough
     char t_value[] = "";
     char *t_data = NULL;
-    int t_dataLength = generateTransactionData(&t_data, id, index, name, phone);
+    int t_dataLength = generateTransactionData(&t_data, id, lotteryNumber);
     RLPStringItem items[9];
     unsigned char *rlp = NULL;
     unsigned int rlpLength = 0;
@@ -117,11 +116,8 @@ void setUint64ToBytes(char *dst, unsigned long long u) {
     }
 }
 
-unsigned int generateTransactionData(char **dst, const unsigned long long& id, const char *index, const char *name, const char *phone) {
-    unsigned int indexLength = strlen(index);
-    unsigned int nameLength = strlen(name);
-    unsigned int phoneLength = strlen(phone);
-    unsigned int length = FUNC_BYTE_CODE_SIZE + UINT_256_BYTE_SIZE * 4;
+unsigned int generateTransactionData(char **dst, const unsigned long long& id, const int& number) {
+    unsigned int length = FUNC_BYTE_CODE_SIZE + UINT_256_BYTE_SIZE * 2;
 
     // init data to all '0'
     *dst = (char*)malloc(length);
@@ -129,7 +125,7 @@ unsigned int generateTransactionData(char **dst, const unsigned long long& id, c
     char *pos = *dst;
 
     // byte code of function SendResult()
-    char funcByteCode[] = { (char)0xe3, (char)0x85, (char)0xf7, (char)0xd2 };
+    char funcByteCode[] = { (char)0xe5, (char)0xe0, (char)0x4a, (char)0x33 };
     memcpy(pos, funcByteCode, FUNC_BYTE_CODE_SIZE);
     pos += FUNC_BYTE_CODE_SIZE;
 
@@ -137,16 +133,8 @@ unsigned int generateTransactionData(char **dst, const unsigned long long& id, c
     setUint64ToBytes(pos + UINT_64_BYTE_OFFSET, id);
     pos += UINT_256_BYTE_SIZE;
 
-    // index
-    memcpy(pos, index, indexLength);
-    pos += UINT_256_BYTE_SIZE;
-
-    // name
-    memcpy(pos, name, nameLength);
-    pos += UINT_256_BYTE_SIZE;
-
-    // phone
-    memcpy(pos, phone, phoneLength);
+    // number
+    setUint64ToBytes(pos + UINT_64_BYTE_OFFSET, number);
 
     return length;
 }
