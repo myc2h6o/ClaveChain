@@ -8,7 +8,7 @@ contract IKycClaveChain
     {
         return 0;
     }
-    
+
     function Update(IKycClaveChain _kycClaveChain)
     {
         if(msg.sender == creator)

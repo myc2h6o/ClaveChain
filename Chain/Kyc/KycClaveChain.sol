@@ -14,7 +14,7 @@ contract KycClaveChain
     uint64 public currentId;
     mapping (uint64 => Request) public requests;
     uint256 constant REQUEST_ETH = 0x10000000000000;
- 
+
     function KycClaveChain(address _clave) public
     {
         clave = _clave;
