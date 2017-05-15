@@ -1,0 +1,26 @@
+start App
+unlock coinbase and start mining
+
+var _clave = "<Enclave address>"
+deploy KycClaveChain
+
+set App middle man address to KycClaveChain address
+
+var _kycClaveChain = "<KycClaveChain address>"
+deploy CustomerInfo
+
+send get outer customer request:
+{
+    "jsonrpc": "2.0",
+    "method": "eth_sendTransaction",
+    "params": [{
+        "to": "<Customer Info Address>",
+        "from": "<Geth coinbase>",
+        "gas": "0x300000",
+        "data": "0x0676aade6162636465000000000000000000000000000000000000000000000000000000",
+        "value": "0x10000000000000"
+    }],
+    "id": 1
+}
+
+check: customerinfo_sol_customerinfo.customers("abcde")

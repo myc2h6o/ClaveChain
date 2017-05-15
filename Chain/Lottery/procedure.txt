@@ -1,0 +1,53 @@
+start App
+unlock coinbase and start mining
+
+var _clave = "<Enclave address>"
+deploy LotteryClaveChain
+
+set App middle man address to LotteryClaveChain address
+
+var _lotteryClaveChain = "<LotteryClaveChain address>"
+deploy Lottery
+
+Buy:
+{
+    "jsonrpc": "2.0",
+    "method": "eth_sendTransaction",
+    "params": [{
+        "to": "<Lottery address>",
+        "from": "<Buyer address>",
+        "gas": "0x300000",
+        "data": "0x248881540000000000000000000000000000000000000000000000000000000000000123",
+        "value": "0x10000"
+    }],
+    "id": 1
+}
+
+GetLotteryNumber:
+{
+    "jsonrpc": "2.0",
+    "method": "eth_sendTransaction",
+    "params": [{
+        "to": "<Lottery address>",
+        "from": "<Distributer address>",
+        "gas": "0x300000",
+        "data": "0x06a5312b",
+        "value": "0x10000000000000"
+    }],
+    "id": 1
+}
+
+Pay:
+GetLotteryNumber:
+{
+    "jsonrpc": "2.0",
+    "method": "eth_sendTransaction",
+    "params": [{
+        "to": "<Lottery address>",
+        "from": "<Distributer address>",
+        "gas": "0x300000",
+        "data": "0x537a924c",
+        "value": "<Total reward money>"
+    }],
+    "id": 1
+}
