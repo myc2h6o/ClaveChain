@@ -22,6 +22,9 @@
     <ClInclude Include="Chain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="env.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Enclave_u.c">

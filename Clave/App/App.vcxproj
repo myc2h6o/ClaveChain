@@ -46,6 +46,7 @@
     <ClInclude Include="Chain.h" />
     <ClInclude Include="Clave.h" />
     <ClInclude Include="Enclave_u.h" />
+    <ClInclude Include="env.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
