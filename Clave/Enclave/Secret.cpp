@@ -4,10 +4,12 @@
 #include "Output.h"
 #include "Secret.h"
 #include "Enclave_t.h"
+#include "env.h"
 #include "mbedtls/ctr_drbg.h"
 #include "mbedtls/ecdsa.h"
 #include "mbedtls/entropy.h"
 #include "mbedTlsSgxSignV.h"
+
 
 /*
  * Use MBEDTLS_ECP_DP_SECP256K1, private key size is 32 bytes, public key size is 65 bytes (with 0x04 as first byte)
@@ -171,8 +173,10 @@ void ecall_generateKeyPair() {
 
     //output address
     printAddress();
-    // [TODO] remove output of private key in use, output private key only for testing convenience
+
+#ifdef ENV_TEST
     printPrivateKey();
+#endif
 }
 
 void ecall_freeKeyPair() {

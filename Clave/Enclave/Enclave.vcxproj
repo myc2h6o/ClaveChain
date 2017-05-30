@@ -69,6 +69,7 @@
     <ClInclude Include="ca_bundle.h" />
     <ClInclude Include="Chain.h" />
     <ClInclude Include="Enclave_t.h" />
+    <ClInclude Include="env.h" />
     <ClInclude Include="Keccak.h" />
     <ClInclude Include="mbedTlsSgxSignV.h" />
     <ClInclude Include="mbedMktime.h" />
