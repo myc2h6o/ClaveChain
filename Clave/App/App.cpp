@@ -3,6 +3,8 @@
 #include <vector>
 #include "Chain.h"
 #include "Clave.h"
+#include "env.h"
+#include "TimeDelay.h"
 
 #ifdef _WIN32
 #else
@@ -53,6 +55,12 @@ int main() {
     // Initialize chain
     Chain::init(GETH_ADDRESS, address);
 
+#ifdef ENV_TEST
+    // evaluate switching time
+    evaluateTimeOutputDelay();
+    clave.evaluateTimeOutputDelay();
+#endif
+
     // Main loop
     std::cout << "Start main loop\n";
     size_t nRequests = 0;
@@ -80,7 +88,15 @@ int main() {
                 bool fail = false;
                 // get data and send result
                 while (1) {
+#ifdef ENV_TEST
+                    // before entering enclave
+                    ocall_printTime();
+#endif
                     signedTransaction = clave.getSignedTransactionFromRequest(Chain::getHexNonce(), requests[i]);
+#ifdef ENV_TEST
+                    // after leaving enclave
+                    ocall_printTime();
+#endif
                     if (signedTransaction.empty()) {
                         // cannot connect to outer data server
                         std::cout << "Cannot connect to outer data server" << std::endl;

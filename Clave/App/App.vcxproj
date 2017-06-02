@@ -47,6 +47,7 @@
     <ClInclude Include="Clave.h" />
     <ClInclude Include="Enclave_u.h" />
     <ClInclude Include="env.h" />
+    <ClInclude Include="TimeDelay.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
@@ -58,6 +59,7 @@
     </ClCompile>
     <ClCompile Include="mbedtls_sgx_u_net.c" />
     <ClCompile Include="mbedtls_sgx_u_std.c" />
+    <ClCompile Include="TimeDelay.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\Enclave\Enclave.edl">

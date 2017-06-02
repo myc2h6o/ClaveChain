@@ -4,5 +4,6 @@ enclave {
 
     untrusted {
         void ocall_printString([in, string] const char *str);
+        void ocall_printTime();
     };
 };

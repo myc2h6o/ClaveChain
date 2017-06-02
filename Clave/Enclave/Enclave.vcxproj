@@ -64,6 +64,7 @@
     <ClCompile Include="RLP.cpp" />
     <ClCompile Include="Secret.cpp" />
     <ClCompile Include="s_client.cpp" />
+    <ClCompile Include="TimeDelay.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ca_bundle.h" />
@@ -92,6 +93,7 @@
     <None Include="OuterData.edl" />
     <None Include="Output.edl" />
     <None Include="Secret.edl" />
+    <None Include="TimeDelay.edl" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Enclave.config.xml" />
