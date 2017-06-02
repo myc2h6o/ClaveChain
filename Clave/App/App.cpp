@@ -12,8 +12,9 @@
 #endif
 
 #define MILLI_SECOND_WAIT_TIME 5000
-#define GETH_ADDRESS "http://localhost:8545"
-#define OUTER_SERVER_NAME "localhost"
+// here use 192.168.13.138 for remote test address, change this in deployment
+#define GETH_ADDRESS "http://192.168.13.138:8545"
+#define OUTER_SERVER_NAME "192.168.13.138"
 #define OUTER_SERVER_PORT "4433"
 
 int main() {
@@ -60,6 +61,11 @@ int main() {
     evaluateTimeOutputDelay();
     clave.evaluateTimeOutputDelay();
 #endif
+
+    Request r;
+    r.id = 1;
+    r.isDone = false;
+    clave.getSignedTransactionFromRequest(Chain::getHexNonce(), r);
 
     // Main loop
     std::cout << "Start main loop\n";
