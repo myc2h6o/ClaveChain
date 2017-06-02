@@ -25,6 +25,9 @@
     <ClInclude Include="env.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TimeDelay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Enclave_u.c">
@@ -43,6 +46,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mbedtls_sgx_u_std.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeDelay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

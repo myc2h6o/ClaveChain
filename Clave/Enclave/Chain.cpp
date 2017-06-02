@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Chain.h"
+#include "env.h"
 #include "Keccak.h"
 #include "OuterData.h"
 #include "Output.h"
@@ -35,11 +36,23 @@ void ecall_setContractAddress(const char *address) {
 void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long id, char *result) {
     // get data from tusted outer source
 
+#ifdef ENV_TEST
+    // after entering enclave
+    // before fetching outer source data
+    ocall_printTime();
+#endif
+
     int lotteryNumber = getLotteryNumber();
     if (lotteryNumber == -1) {
         result[0] = '\0';
         return;
     }
+
+#ifdef ENV_TEST
+    // after fetching outer source data
+    // before serializing transaction
+    ocall_printTime();
+#endif
 
     //get serialized transaction
     char *t_nonce = (char*)malloc(strlen(nonce) + 1);
@@ -67,11 +80,23 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long
     setRLPStringItem(items + 5, t_data, t_dataLength, false);
     rlpLength = RLP::encodeArray(&rlp, items, 6);
 
+#ifdef ENV_TEST
+    // after serializing transaction
+    // before signing transaction
+    ocall_printTime();
+#endif
+
     // sign transaction
     char *sigr = NULL;
     char *sigs = NULL;
     char sigv = '\0';
     sign((char*)rlp, rlpLength, &sigr, &sigs, &sigv);
+
+#ifdef ENV_TEST
+    // after signing transaction
+    // before serializing signed transaction
+    ocall_printTime();
+#endif
 
     // get rlp with signature
     setRLPStringItem(items + 6, &sigv, 1, false);
@@ -94,6 +119,12 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long
     free(rlp);
     free(sigr);
     free(sigs);
+
+#ifdef ENV_TEST
+    // after serializing signed transaction
+    // before leaving enclave
+    ocall_printTime();
+#endif
 }
 
 

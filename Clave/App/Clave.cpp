@@ -290,3 +290,14 @@ int Clave::init(void)
 void ocall_printString(const char *str) {
     printf("%s", str);
 }
+
+/*
+ * ocall_printMicroTime
+ * Ocall function to print current time in microsecond
+ */
+#include <chrono>
+#include <iostream>
+void ocall_printTime() {
+    auto t = std::chrono::high_resolution_clock::now().time_since_epoch();
+    std::cout << t.count() << std::endl;
+}

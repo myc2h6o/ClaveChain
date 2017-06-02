@@ -51,6 +51,9 @@
     <ClCompile Include="mbedMktime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TimeDelay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enclave_t.h">
@@ -107,6 +110,9 @@
       <Filter>Source Files</Filter>
     </None>
     <None Include="OuterData.edl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="TimeDelay.edl">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
