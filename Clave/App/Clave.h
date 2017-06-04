@@ -19,7 +19,7 @@ public:
     sgx_status_t initOuterDataServer(const char *name, const char *port) { return ecall_initOuterDataServer(global_eid, name, port); }
     sgx_status_t destroyOuterDataServer() { return ecall_destroyOuterDataServer(global_eid); }
     std::string getSignedTransactionFromRequest(const std::string& nonce, const Request& req) {
-        sgx_status_t ret = ecall_getSignedTransactionFromRequest(global_eid, nonce.c_str(), req.id, eResult);
+        sgx_status_t ret = ecall_getSignedTransactionFromRequest(global_eid, nonce.c_str(), req.id,(char*)req.hexUser, (char*)req.hexEncPassword, eResult);
         std::string result = std::string(eResult);
         return result;
     }

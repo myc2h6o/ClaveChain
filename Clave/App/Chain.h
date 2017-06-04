@@ -6,6 +6,9 @@
 #define CURL_STATICLIB
 #include "curl/curl.h"
 
+#define HEX_USER_SIZE 64
+#define HEX_ENC_PWD_SIZE 512
+
 enum T_CallContract {
     CALL_CONTRACT_OK,
     CALL_CONTRACT_FAIL,
@@ -15,6 +18,8 @@ enum T_CallContract {
 struct Request {
     unsigned long long id;
     bool isDone;
+    char hexUser[HEX_USER_SIZE + 1];
+    char hexEncPassword[HEX_ENC_PWD_SIZE + 1];
 };
 
 class Chain {

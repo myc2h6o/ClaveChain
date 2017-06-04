@@ -15,6 +15,8 @@
 #define UINT_64_BYTE_SIZE 8
 #define CONTRACT_ADDRESS_BYTE_SIZE 20
 #define SIGNED_TRANSACTION_MAX_SIZE 2048
+#define HEX_USER_SIZE 64
+#define HASH_PASSWORD_SIZE 32
 
 char contractAddress[CONTRACT_ADDRESS_BYTE_SIZE * 2 + 1];
 
@@ -33,7 +35,7 @@ void ecall_setContractAddress(const char *address) {
     convertHexToBytes(contractAddress);
 }
 
-void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long id, char *result) {
+void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long id, char *hexUser, char *hexEncPassword, char *result) {
     // get data from tusted outer source
 
 #ifdef ENV_TEST
@@ -42,11 +44,7 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long
     ocall_printTime();
 #endif
 
-    int lotteryNumber = getLotteryNumber();
-    if (lotteryNumber == -1) {
-        result[0] = '\0';
-        return;
-    }
+    char *hashPassword = getHashPasswordFromHexEnc(hexEncPassword);
 
 #ifdef ENV_TEST
     // after fetching outer source data
@@ -67,7 +65,7 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long
     char t_gasLimit[] = "20000";     // here is hex format, should be large enough
     char t_value[] = "";
     char *t_data = NULL;
-    int t_dataLength = generateTransactionData(&t_data, id, lotteryNumber);
+    int t_dataLength = generateTransactionData(&t_data, id, hexUser, hashPassword);
     RLPStringItem items[9];
     unsigned char *rlp = NULL;
     unsigned int rlpLength = 0;
@@ -114,6 +112,7 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long
     }
 
     // clean up
+    free(hashPassword);
     free(t_nonce);
     free(t_data);
     free(rlp);
@@ -147,8 +146,8 @@ void setUint64ToBytes(char *dst, unsigned long long u) {
     }
 }
 
-unsigned int generateTransactionData(char **dst, const unsigned long long& id, const int& number) {
-    unsigned int length = FUNC_BYTE_CODE_SIZE + UINT_256_BYTE_SIZE * 2;
+unsigned int generateTransactionData(char **dst, const unsigned long long& id, char *hexUser, char *hashPassword) {
+    unsigned int length = FUNC_BYTE_CODE_SIZE + UINT_256_BYTE_SIZE + HEX_USER_SIZE / 2 + HASH_PASSWORD_SIZE;
 
     // init data to all '0'
     *dst = (char*)malloc(length);
@@ -156,7 +155,7 @@ unsigned int generateTransactionData(char **dst, const unsigned long long& id, c
     char *pos = *dst;
 
     // byte code of function SendResult()
-    char funcByteCode[] = { (char)0xe5, (char)0xe0, (char)0x4a, (char)0x33 };
+    char funcByteCode[] = { (char)0xfa, (char)0x1d, (char)0xb1, (char)0xe7 };
     memcpy(pos, funcByteCode, FUNC_BYTE_CODE_SIZE);
     pos += FUNC_BYTE_CODE_SIZE;
 
@@ -164,8 +163,13 @@ unsigned int generateTransactionData(char **dst, const unsigned long long& id, c
     setUint64ToBytes(pos + UINT_64_BYTE_OFFSET, id);
     pos += UINT_256_BYTE_SIZE;
 
-    // number
-    setUint64ToBytes(pos + UINT_64_BYTE_OFFSET, number);
+    // user
+    convertHexToBytes(hexUser);
+    memcpy(pos, hexUser, HEX_USER_SIZE / 2);
+    pos += HEX_USER_SIZE / 2;
+
+    // hash password
+    memcpy(pos, hashPassword, HASH_PASSWORD_SIZE);
 
     return length;
 }

@@ -20,6 +20,8 @@
 #define PUBLIC_KEY_BYTE_SIZE 64
 #define ADDRESS_HEX_OFFSET 24
 #define SIGNATURE_HEX_SIZE 64
+#define HEX_ENC_PWD_SIZE 512
+#define NONCE_LENGTH  16
 
 mbedtls_entropy_context entropy;
 mbedtls_ctr_drbg_context ctr_drbg;
@@ -177,6 +179,10 @@ void ecall_generateKeyPair() {
 #ifdef ENV_TEST
     printPrivateKey();
 #endif
+}
+
+char *getHashPasswordFromHexEnc(char * hexEncPassword) {
+    //[TODO]
 }
 
 void ecall_freeKeyPair() {

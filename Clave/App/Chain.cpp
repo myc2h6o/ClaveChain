@@ -153,6 +153,16 @@ Request Chain::getRequest(const unsigned long long& id) {
         result.isDone = false;
     }
 
+    // get user
+    pos += 1;
+    memcpy(result.hexUser, curlRetData.c_str() + pos, HEX_USER_SIZE);
+    result.hexUser[HEX_USER_SIZE] = '\0';
+
+    // get hex encPassword
+    pos += HEX_UINT256_SIZE;
+    memcpy(result.hexEncPassword, curlRetData.c_str() + pos, HEX_ENC_PWD_SIZE);
+    result.hexEncPassword[HEX_ENC_PWD_SIZE] = '\0';
+
     return result;
 }
 
