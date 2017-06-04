@@ -62,11 +62,6 @@ int main() {
     clave.evaluateTimeOutputDelay();
 #endif
 
-    Request r;
-    r.id = 1;
-    r.isDone = false;
-    clave.getSignedTransactionFromRequest(Chain::getHexNonce(), r);
-
     // Main loop
     std::cout << "Start main loop\n";
     size_t nRequests = 0;
