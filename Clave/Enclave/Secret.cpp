@@ -222,6 +222,7 @@ void ecall_generateKeyPair() {
 
 char *getHexHashPasswordFromHexEnc(char * hexEncPassword) {
     // generate password with salt
+    convertHexToBytes(hexEncPassword);
     unsigned char password[MAX_PASSWORD_SIZE];
     size_t length;
     mbedtls_rsa_pkcs1_decrypt(&rsaContext, mbedtls_ctr_drbg_random, &ctr_drbg, MBEDTLS_RSA_PRIVATE, &length, (unsigned char*)hexEncPassword, (unsigned char*)password, MAX_PASSWORD_SIZE);
