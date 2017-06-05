@@ -4,10 +4,12 @@
 #include "Output.h"
 #include "Secret.h"
 #include "Enclave_t.h"
+#include "sgx_trts.h"
 #include "env.h"
 #include "mbedtls/ctr_drbg.h"
 #include "mbedtls/ecdsa.h"
 #include "mbedtls/entropy.h"
+#include "mbedtls/rsa.h"
 #include "mbedTlsSgxSignV.h"
 
 
@@ -20,12 +22,18 @@
 #define PUBLIC_KEY_BYTE_SIZE 64
 #define ADDRESS_HEX_OFFSET 24
 #define SIGNATURE_HEX_SIZE 64
+#define RSA_KEY_SIZE 2048
+#define RSA_EXPONENT 65537
 #define HEX_ENC_PWD_SIZE 512
 #define NONCE_LENGTH  16
+#define SALT_LENGTH NONCE_LENGTH
+#define MAX_PASSWORD_SIZE 80
 
 mbedtls_entropy_context entropy;
 mbedtls_ctr_drbg_context ctr_drbg;
 mbedtls_ecdsa_context ecdsaContext;
+mbedtls_rsa_context rsaContext;
+unsigned char salt[SALT_LENGTH];
 
 int HexToNumber(const char& x) {
     if (x >= '0' && x <= '9') {
@@ -106,6 +114,17 @@ void printAddress() {
     free(address);
 }
 
+void printRsaPublicKey() {
+    oprintf("rsa public key:\n");
+    const int size = RSA_KEY_SIZE / 8;
+    unsigned char buf[size];
+    mbedtls_mpi_write_binary(&rsaContext.N, buf, size);
+    oprintf("N = ");
+    printHexFromBytes(buf, size);
+    oprintf("\n");
+    oprintf("E = %x\n", RSA_EXPONENT);
+}
+
 /*
  * Sign a message
  * input param:
@@ -173,6 +192,23 @@ void ecall_generateKeyPair() {
         return;
     }
 
+    // RSA
+    mbedtls_rsa_init(&rsaContext, MBEDTLS_RSA_PKCS_V15, 0);
+    if ((ret = mbedtls_rsa_gen_key(&rsaContext, mbedtls_ctr_drbg_random, &ctr_drbg, RSA_KEY_SIZE, RSA_EXPONENT)) != 0) {
+        oprintf("Secret:ecall_generateKeyPair: fail! mbedtls_rsa_gen_key returned %d\n", ret);
+        return;
+    }
+
+    // salt
+    sgx_read_rand(salt, SALT_LENGTH);
+#ifdef ENV_TEST
+    oprintf("salt: ");
+    printHexFromBytes(salt, SALT_LENGTH);
+#endif
+
+    //output rsa public key
+    printRsaPublicKey();
+
     //output address
     printAddress();
 
@@ -182,11 +218,21 @@ void ecall_generateKeyPair() {
 }
 
 char *getHashPasswordFromHexEnc(char * hexEncPassword) {
-    //[TODO]
+    // generate password with salt
+    unsigned char password[MAX_PASSWORD_SIZE];
+    size_t length;
+    mbedtls_rsa_pkcs1_decrypt(&rsaContext, mbedtls_ctr_drbg_random, &ctr_drbg, MBEDTLS_RSA_PRIVATE, &length, (unsigned char*)hexEncPassword, (unsigned char*)password, MAX_PASSWORD_SIZE);
+    memcpy(password, salt, SALT_LENGTH);
+
+    // generate hash salt password
+    Keccak keccak;
+    keccak.add(password, length);
+    return keccak.getHash();
 }
 
 void ecall_freeKeyPair() {
     mbedtls_ctr_drbg_free(&ctr_drbg);
     mbedtls_entropy_free(&entropy);
     mbedtls_ecdsa_free(&ecdsaContext);
+    mbedtls_rsa_free(&rsaContext);
 }
