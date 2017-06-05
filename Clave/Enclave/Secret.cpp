@@ -83,11 +83,15 @@ void getHexFromBytes(char *hex, const unsigned char *bytes, const int& byteSize)
     }
 }
 
-void printHexFromBytes(unsigned char *buf, size_t len) {
+void printHexFromBytes(unsigned char *buf, size_t len, bool withPrefix = true) {
     char *outbuf = (char*)malloc(len * 2 + 1);
     getHexFromBytes(outbuf, buf, len);
     outbuf[2 * len] = 0;
-    oprintf("0x%s\n", outbuf);
+    if (withPrefix) {
+        oprintf("0x");
+    }
+
+    oprintf("%s\n", outbuf);
     free(outbuf);
 }
 
@@ -120,8 +124,7 @@ void printRsaPublicKey() {
     unsigned char buf[size];
     mbedtls_mpi_write_binary(&rsaContext.N, buf, size);
     oprintf("N = ");
-    printHexFromBytes(buf, size);
-    oprintf("\n");
+    printHexFromBytes(buf, size, false);
     oprintf("E = %x\n", RSA_EXPONENT);
 }
 
