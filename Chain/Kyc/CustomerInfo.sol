@@ -29,9 +29,6 @@ contract CustomerInfo is IKycClaveChain
 
     function SetCustomerInfo(uint64 requestId, bytes18 index, bytes32 name, bytes11 phone) public
     {
-        if(requestId != reqid) {
-            throw;
-        }
         if(msg.sender == address(kycClaveChain))
         {
             customers[index].name = name;
