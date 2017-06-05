@@ -220,7 +220,7 @@ void ecall_generateKeyPair() {
 #endif
 }
 
-char *getHashPasswordFromHexEnc(char * hexEncPassword) {
+char *getHexHashPasswordFromHexEnc(char * hexEncPassword) {
     // generate password with salt
     unsigned char password[MAX_PASSWORD_SIZE];
     size_t length;

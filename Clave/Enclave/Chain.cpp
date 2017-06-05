@@ -16,7 +16,7 @@
 #define CONTRACT_ADDRESS_BYTE_SIZE 20
 #define SIGNED_TRANSACTION_MAX_SIZE 2048
 #define HEX_USER_SIZE 64
-#define HASH_PASSWORD_SIZE 32
+#define HEX_HASH_PASSWORD_SIZE 64
 
 char contractAddress[CONTRACT_ADDRESS_BYTE_SIZE * 2 + 1];
 
@@ -44,7 +44,7 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long
     ocall_printTime();
 #endif
 
-    char *hashPassword = getHashPasswordFromHexEnc(hexEncPassword);
+    char *hexHashPassword = getHexHashPasswordFromHexEnc(hexEncPassword);
 
 #ifdef ENV_TEST
     // after fetching outer source data
@@ -65,7 +65,7 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long
     char t_gasLimit[] = "20000";     // here is hex format, should be large enough
     char t_value[] = "";
     char *t_data = NULL;
-    int t_dataLength = generateTransactionData(&t_data, id, hexUser, hashPassword);
+    int t_dataLength = generateTransactionData(&t_data, id, hexUser, hexHashPassword);
     RLPStringItem items[9];
     unsigned char *rlp = NULL;
     unsigned int rlpLength = 0;
@@ -112,7 +112,7 @@ void ecall_getSignedTransactionFromRequest(const char *nonce, unsigned long long
     }
 
     // clean up
-    free(hashPassword);
+    free(hexHashPassword);
     free(t_nonce);
     free(t_data);
     free(rlp);
@@ -146,8 +146,8 @@ void setUint64ToBytes(char *dst, unsigned long long u) {
     }
 }
 
-unsigned int generateTransactionData(char **dst, const unsigned long long& id, char *hexUser, char *hashPassword) {
-    unsigned int length = FUNC_BYTE_CODE_SIZE + UINT_256_BYTE_SIZE + HEX_USER_SIZE / 2 + HASH_PASSWORD_SIZE;
+unsigned int generateTransactionData(char **dst, const unsigned long long& id, char *hexUser, char *hexHashPassword) {
+    unsigned int length = FUNC_BYTE_CODE_SIZE + UINT_256_BYTE_SIZE + HEX_USER_SIZE / 2 + HEX_HASH_PASSWORD_SIZE / 2;
 
     // init data to all '0'
     *dst = (char*)malloc(length);
@@ -169,7 +169,8 @@ unsigned int generateTransactionData(char **dst, const unsigned long long& id, c
     pos += HEX_USER_SIZE / 2;
 
     // hash password
-    memcpy(pos, hashPassword, HASH_PASSWORD_SIZE);
+    convertHexToBytes(hexHashPassword);
+    memcpy(pos, hexHashPassword, HEX_HASH_PASSWORD_SIZE / 2);
 
     return length;
 }
