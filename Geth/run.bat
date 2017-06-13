@@ -1,1 +1,1 @@
-geth --datadir "./" --cache=512 --rpc --rpccorsdomain "*"
+geth --datadir "./" --rpc --rpcport "8545" --rpcaddr "0.0.0.0" --rpccorsdomain "*" --nodiscover
