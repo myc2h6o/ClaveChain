@@ -8,6 +8,7 @@ contract IdClaveChain
         bytes4 callback;
         bool isDone;
         bytes32 user;
+        // eight part of RSA encrypted password
         bytes32 encPassword_0;
         bytes32 encPassword_1;
         bytes32 encPassword_2;
