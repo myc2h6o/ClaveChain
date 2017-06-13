@@ -84,7 +84,6 @@ void clinet_context_init(const char *serverName, const char *serverPort) {
     sgx_time_t sgxNow;
     if (sgx_get_trusted_time(&sgxNow, &sgxTimeSourceNonce) != SGX_SUCCESS) {
         oprintf("s_client:client_context_init() : fail! Cannot init sgx time\n");
-        return;
     }
 
     // mbedtls context
